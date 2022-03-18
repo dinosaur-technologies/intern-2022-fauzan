@@ -102,7 +102,7 @@ app.use((req, res, next) => {
     });
 });
 
-// #6
+// #6 test
 app.listen(3000, () =>
     console.log('REST API server ready at: http://localhost:3000'),
 )
