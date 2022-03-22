@@ -22,6 +22,7 @@ model Admin {
 
 }
 
+
 model  Book{
   id    Int     @default(autoincrement()) @id
   title String  @unique
@@ -34,9 +35,11 @@ model  Book{
   updatedAt DateTime @updatedAt
 }
 
+
 model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
+  phone_number String
   username  String
   password  String
   createdAt DateTime @default(now())
