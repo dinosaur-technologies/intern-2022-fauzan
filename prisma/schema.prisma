@@ -10,7 +10,7 @@ generator client {
 
 model  Book{
   id    Int     @default(autoincrement()) @id
-  title String  @unique
+  title String  
   author  String
   publisher  String
   year Int
