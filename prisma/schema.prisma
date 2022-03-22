@@ -65,7 +65,7 @@ model Loan {
 model Fine {
   id    Int     @default(autoincrement()) @id
   value String
-  // loan    Loan_History?   @relation(fields: [singerId], references: [id])
+  // loan    Loan_History?   @relation(fields: [loanId], references: [id])
   loanId  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
