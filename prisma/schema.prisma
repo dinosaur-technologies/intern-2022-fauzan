@@ -7,6 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 generator dbml {
   provider = "prisma-dbml-generator"
 }
@@ -18,16 +19,29 @@ model Admin {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 }
+
 
 model  Book{
   id    Int     @default(autoincrement()) @id
-  title String  
+  title String  @unique
   author  String
   publisher  String
   year Int
   description String
   ISBN String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  phone_number String
+  username  String
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
