@@ -20,6 +20,7 @@ model Admin {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  Books Book[]
 }
 
 
@@ -31,6 +32,8 @@ model  Book{
   year Int
   description String
   ISBN String
+  creatorAdmin Admin @relation(fields: [createdBy], references: [id])
+  createdBy Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
