@@ -44,7 +44,7 @@ model User {
   password  String
 }
 
-model Loan_History {
+model Loan {
   id    Int     @default(autoincrement()) @id
   // books    Book?   @relation(fields: [bookId], references: [id])
   // bookId  Int?
