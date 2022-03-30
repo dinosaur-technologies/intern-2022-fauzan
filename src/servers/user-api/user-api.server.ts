@@ -7,11 +7,11 @@ const { app, logger } = init(
   [UsersController],
 );
 
-app.listen(config.ADMIN_API_PORT, async () => {
+app.listen(config.USER_API_PORT, async () => {
   try {
   } catch (error) {
     console.error(error);
   }
 
-  logger.success(`User API is listening on port: ${config.ADMIN_API_PORT}`, config);
+  logger.success(`User API is listening on port: ${config.USER_API_PORT}`, config);
 });
