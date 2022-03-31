@@ -33,6 +33,8 @@ model  Book{
   ISBN String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Loans Loan[]
 }
 
 
@@ -42,6 +44,8 @@ model User {
   phone_number String
   username  String
   password  String
+
+  Loans Loan[]
 }
 
 model Loan {
