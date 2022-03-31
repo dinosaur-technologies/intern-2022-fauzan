@@ -23,7 +23,6 @@ model Admin {
   Books Book[]
 }
 
-
 model  Book{
   id    Int     @default(autoincrement()) @id
   title String  @unique
@@ -60,4 +59,17 @@ model Loan {
   startDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Fines Fine[]
 }
+
+
+model Fine {
+  id    Int     @default(autoincrement()) @id
+  value String
+  loan  Loan   @relation(fields: [loanId], references: [id])
+  loanId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
