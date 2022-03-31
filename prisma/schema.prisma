@@ -36,6 +36,8 @@ model  Book{
   createdBy Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Loans Loan[]
 }
 
 
@@ -45,6 +47,17 @@ model User {
   phone_number String
   username  String
   password  String
+
+  Loans Loan[]
+}
+
+model Loan {
+  id    Int     @default(autoincrement()) @id
+  books    Book   @relation(fields: [bookId], references: [id])
+  bookId  Int
+  users    User   @relation(fields: [userId], references: [id])
+  userId  Int
+  startDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
