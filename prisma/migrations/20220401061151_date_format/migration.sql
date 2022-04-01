@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Loan" ALTER COLUMN "startDate" SET DATA TYPE TIMESTAMP(3);
