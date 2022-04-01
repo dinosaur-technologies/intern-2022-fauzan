@@ -70,8 +70,3 @@ export class BooksRepository{
       }
 }
 
-let test = new BooksRepository()
-
-test.create()
-  .catch((e) => console.error(e))
-  .finally(async () => await prisma.$disconnect())
