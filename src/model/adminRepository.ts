@@ -43,8 +43,3 @@ export class AdminsRepository{
     }
 }
 
-// let test = new AdminsRepository()
-
-// test.create()
-//   .catch((e) => console.error(e))
-//   .finally(async () => await prisma.$disconnect())
