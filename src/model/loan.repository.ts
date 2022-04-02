@@ -3,17 +3,20 @@ const prisma = new PrismaClient()
 
 export class LoansRepository{
     
-    async create() {
+    async create(
+      bookId: number,
+      userId: number,
+      startDate: string,
+    ){
       const newLoan = await prisma.loan.create({
-        data: {
-          bookId:1,
-          userId:3,
-          startDate:"2022-05-02T17:14:30.047Z"
-
-        },
+        data:{
+          bookId,
+          userId,
+          startDate,
+        }  
     })
-       console.log('New loan: ')
-       console.log(newLoan);
+      console.log('New loan: ')
+      console.log(newLoan);
     }
 
     async findByUserId(userId: number) {
@@ -37,5 +40,4 @@ export class LoansRepository{
       }
   
 }
-
 

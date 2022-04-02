@@ -3,16 +3,20 @@ const prisma = new PrismaClient()
 
 export class AdminsRepository{
     
-    async create() {
-      const newAdmin = await prisma.admin.create({
-        data: {
-            username: 'Admin3',
-            password: 'admin3',
-            email: 'admin3@admin.com',
-        },
-    })
-       console.log('New admin: ')
-       console.log(newAdmin);
+    async create(
+        username: string,
+        password: string,
+        email: string, 
+    ){
+        const newAdmin = await prisma.admin.create({
+          data:{
+            username,
+            password,
+            email,
+          }  
+        })
+        console.log('New admin: ')
+        console.log(newAdmin);
     }
 
     async list() {

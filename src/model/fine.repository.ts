@@ -3,16 +3,19 @@ const prisma = new PrismaClient()
 
 export class FinesRepository{
     
-    async create() {
-      const newFine = await prisma.fine.create({
-        data: {
-            value: "RM 0.60",
-            loanId: 1
-        },
+  async create(
+    value: string,
+    loanId: number, 
+  ){
+    const newFine = await prisma.fine.create({
+      data:{
+        value,
+        loanId,
+      }  
     })
-       console.log('New fine: ')
-       console.log(newFine);
-    }
+    console.log('New fine: ')
+    console.log(newFine);
+  }
 
     async delete(id: number) {
         const deleteFine = await prisma.fine.delete({

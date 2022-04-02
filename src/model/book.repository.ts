@@ -3,21 +3,28 @@ const prisma = new PrismaClient()
 
 export class BooksRepository{
     
-      async create() {
+    async create(
+      title: string,
+      author: string,
+      publisher: string,
+      year: number ,
+      description: string,
+      ISBN: string,
+      createdBy: number, 
+    ){
         const newBook = await prisma.book.create({
-          data: {
-            title: "Python Learn",
-            author: "Adam",
-            publisher: "Tech",
-            year: 2012,
-            description: "Those who want to learn python",
-            ISBN: "1113273524",
-            createdBy: 4
-          },
-      })
-
-      console.log('New book: ')
-      console.log(newBook);
+          data:{
+            title,
+            author,
+            publisher,
+            year,
+            description,
+            ISBN,
+            createdBy,
+          }  
+        })
+        console.log('New book: ')
+        console.log(newBook);
     }
 
     async list() {
