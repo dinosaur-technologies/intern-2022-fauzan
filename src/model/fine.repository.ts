@@ -17,7 +17,7 @@ export class FinesRepository{
     console.log(newFine);
   }
 
-    async delete(id: number) {
+    async deleteById(id: number) {
         const deleteFine = await prisma.fine.delete({
           where: {
             id,

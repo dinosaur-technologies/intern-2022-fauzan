@@ -34,7 +34,7 @@ export class BooksRepository{
         console.log(listBook);
       }
   
-    async delete(id: number) {
+    async deleteById(id: number) {
         const deleteBook = await prisma.book.delete({
           where: {
             id,
@@ -44,7 +44,7 @@ export class BooksRepository{
         console.log(deleteBook);
       }
 
-    async update(id: number) {
+    async updateById(id: number) {
       const updateUser = await prisma.book.update({
         where: {
           id,

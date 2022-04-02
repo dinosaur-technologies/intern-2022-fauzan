@@ -26,7 +26,7 @@ export class AdminsRepository{
       console.log(listAdmin);
     }
 
-    async delete(id: number) {
+    async deleteById(id: number) {
       const deleteAdmin = await prisma.admin.delete({
         where: {
           id,

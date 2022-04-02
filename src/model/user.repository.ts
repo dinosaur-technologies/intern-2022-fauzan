@@ -28,7 +28,7 @@ export class UsersRepository{
       console.log(listUser);
     }
 
-    async delete(id: number) {
+    async deleteById(id: number) {
       const deleteUser = await prisma.user.delete({
         where: {
           id,

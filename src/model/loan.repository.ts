@@ -29,7 +29,7 @@ export class LoansRepository{
         console.log(findLoan);
     }
 
-    async delete(id: number) {
+    async deleteById(id: number) {
         const deleteLoan = await prisma.loan.delete({
           where: {
             id,
