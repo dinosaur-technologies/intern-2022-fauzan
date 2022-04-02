@@ -16,6 +16,8 @@ import {
   Response,
 } from '@decorators/express';
 import { Logger } from '@providers/logger.provider';
+import { validate } from '@utils/validate.util';
+import { BookDto } from '@servers/public-api/books/books.dto';
 
 @Controller('/books')
 export class BooksController {
@@ -28,7 +30,9 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      return response.status(201).json({});
+      const body = await validate<BookDto>(BookDto, request.body);
+      // TODO: Use BookService to validate and create
+      return response.status(201).json(body);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
