@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist && tsc",
     "public-api": "node -r module-alias/register dist/servers/public-api/public-api.server.js",
-    "public-api:dev": "NODE_ENV=development tsc-watch --onSuccess \"yarn public-api\""
+    "public-api:dev": "NODE_ENV=development tsc-watch --onSuccess \"yarn public-api\"",
+    "admin-api": "node -r module-alias/register dist/servers/admin-api/admin-api.server.js",
+    "admin-api:dev": "NODE_ENV=development tsc-watch --onSuccess \"yarn admin-api\"",
+    "user-api": "node -r module-alias/register dist/servers/user-api/user-api.server.js",
+    "user-api:dev": "NODE_ENV=development tsc-watch --onSuccess \"yarn user-api\""
   },
   "keywords": [],
   "author": "",
