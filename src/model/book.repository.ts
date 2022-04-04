@@ -1,79 +1,35 @@
-import { PrismaClient, Prisma, Book } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient, Prisma, Book } from '@prisma/client';
+const prisma = new PrismaClient();
 
-export class BooksRepository{
-    
-    async create(
-      title: string,
-      author: string,
-      publisher: string,
-      year: number ,
-      description: string,
-      ISBN: string,
-      createdBy: number, 
-    ){
-        const newBook = await prisma.book.create({
-          data:{
-            title,
-            author,
-            publisher,
-            year,
-            description,
-            ISBN,
-            createdBy,
-          }  
-        })
-        console.log('New book: ')
-        console.log(newBook);
-    }
+export class BooksRepository {
+  async create(params: Prisma.BookCreateArgs) {
+    return prisma.book.create(params);
+  }
 
-    async list() {
-        const listBook = await prisma.book.findMany() 
-  
-        console.log('List book: ')
-        console.log(listBook);
-      }
-  
-    async deleteById(id: number) {
-        const deleteBook = await prisma.book.delete({
-          where: {
-            id,
-          }
-        })
-        console.log('Delete book: ')
-        console.log(deleteBook);
-      }
+  async list() {
+    return prisma.book.findMany();
+  }
 
-    async updateById(id: number) {
-      const updateUser = await prisma.book.update({
-        where: {
-          id,
-        },
-        data: {
-          title: "Programming",
-        },
-      })
-    }
+  async deleteById(id: number) {
+    return prisma.book.delete({ where: { id } });
+  }
 
-    async findOnebyId(id: number) {
-        const findBook= await prisma.book.findUnique({
-          where: {
-              id,
-          }
-      })
-        console.log('The book that had been found: ')
-        console.log(findBook);
-      }
-    
-    async sortByTitle() {
-        const sortBook = await prisma.book.findMany({
-            orderBy: {
-                title: 'asc'
-            }
-        }) 
-  
-        console.log('Sort book: ')
-        console.log(sortBook);
-      }
+  async updateById(params: Prisma.BookUpdateArgs, id: number) {
+    return prisma.book.update({
+      data: params.data,
+      where: { id },
+    });
+  }
+
+  async findOnebyId(id: number) {
+    return prisma.book.findUnique({ where: { id } });
+  }
+
+  async sortByTitle() {
+    return prisma.book.findMany({
+      orderBy: {
+        title: 'asc',
+      },
+    });
+  }
 }
-
