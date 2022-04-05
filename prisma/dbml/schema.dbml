@@ -9,4 +9,58 @@ Table Admin {
   password String [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  Books Book [not null]
 }
+
+Table Book {
+  id Int [pk, increment]
+  title String [unique, not null]
+  author String [not null]
+  publisher String [not null]
+  year Int [not null]
+  description String [not null]
+  ISBN String [not null]
+  creatorAdmin Admin [not null]
+  createdBy Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Loans Loan [not null]
+}
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  phone_number String [not null]
+  username String [not null]
+  password String [not null]
+  Loans Loan [not null]
+}
+
+Table Loan {
+  id Int [pk, increment]
+  books Book [not null]
+  bookId Int [not null]
+  users User [not null]
+  userId Int [not null]
+  startDate DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Fines Fine [not null]
+}
+
+Table Fine {
+  id Int [pk, increment]
+  value String [not null]
+  loan Loan [not null]
+  loanId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Ref: Book.createdBy > Admin.id
+
+Ref: Loan.bookId > Book.id
+
+Ref: Loan.userId > User.id
+
+Ref: Fine.loanId > Loan.id
