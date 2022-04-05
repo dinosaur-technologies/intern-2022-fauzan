@@ -2,16 +2,8 @@ import { PrismaClient, Prisma, Admin } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class AdminsRepository {
-  async create(username: string, password: string, email: string) {
-    const newAdmin = await prisma.admin.create({
-      data: {
-        username,
-        password,
-        email,
-      },
-    });
-    console.log('New admin: ');
-    console.log(newAdmin);
+  async create(params: Prisma.AdminCreateArgs) {
+    return prisma.admin.create(params);
   }
 
   async list() {
@@ -29,6 +21,18 @@ export class AdminsRepository {
     });
     console.log('Delete admin: ');
     console.log(deleteAdmin);
+  }
+
+  async findFirst(params: Prisma.AdminFindFirstArgs) {
+    return prisma.admin.findFirst(params);
+  }
+
+  async findOneByEmail(email: string) {
+    return this.findFirst({
+      where: {
+        email,
+      },
+    });
   }
 
   async findOnebyId(id: number) {
