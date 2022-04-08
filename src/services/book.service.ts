@@ -1,4 +1,7 @@
-import { NotFoundException } from "@exceptions/http-exception";
+import {
+  NotFoundException,
+  ConflictException,
+} from "@exceptions/http-exception";
 import { RegisterBook, UpdateBook, FindBook } from "@interfaces/book.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -6,8 +9,13 @@ import { repositories } from "@repositories/index.repository";
 export class BookService {
   private readonly logger = Logger("BookService");
 
-  async register(params: { data: RegisterBook }) {
+  async registerBook(params: { data: RegisterBook }) {
     const newBook = await repositories.books.create(params);
+
+    if (!newBook) {
+      throw new ConflictException("Request could not be processed");
+    }
+
     return newBook;
   }
 
