@@ -41,7 +41,7 @@ model Book {
 model User {
   id           Int    @id @default(autoincrement())
   email        String @unique
-  phone_number String
+  phoneNumber String
   username     String
   password     String
 

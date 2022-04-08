@@ -7,7 +7,7 @@ export interface SignupParams {
   email: string;
   username: string;
   password: string;
-  phone_number: string;
+  phoneNumber: string;
 }
 
 export interface Recover {
