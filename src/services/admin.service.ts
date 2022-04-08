@@ -18,11 +18,12 @@ export class AdminService {
   async signin(params: SigninParams) {
     const { email, password } = params;
     const existing = await repositories.admins.findOneByEmail(email);
-    const validPassword = await bcrypt.compare(password, existing.password);
-
+    
     if (!existing) {
       throw new UnauthorizedException("Invalid Credentials");
     }
+
+    const validPassword = await bcrypt.compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");

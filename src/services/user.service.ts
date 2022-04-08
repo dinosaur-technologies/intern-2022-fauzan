@@ -18,11 +18,12 @@ export class UserService {
   async signin(params: SigninParams) {
     const { email, password } = params;
     const existing = await repositories.users.findOneByEmail(email);
-    const validPassword = await bcrypt.compare(password, existing.password);
 
     if (!existing) {
       throw new UnauthorizedException("Invalid Credentials");
     }
+
+    const validPassword = await bcrypt.compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");
@@ -31,13 +32,13 @@ export class UserService {
   }
 
   async signup(params: SignupParams) {
-    const { email, username, phone_number, password } = params;
+    const { email, username, phoneNumber, password } = params;
     const hashedPassword = bcrypt.hash(password, 10);
     const newUser = await repositories.users.create({
       data: {
         email,
         username,
-        phone_number,
+        phoneNumber,
         password: hashedPassword,
       },
     });
