@@ -44,7 +44,7 @@ export class UserService {
     });
 
     if (!newUser) {
-      throw new ConflictException("Email already in used");
+      throw new ConflictException("Signup error because of conflict in request");
     }
 
     return newUser;
