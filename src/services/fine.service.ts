@@ -2,14 +2,18 @@ import {
   ConflictException,
   NotFoundException,
 } from "@exceptions/http-exception";
-import { ChargeFine, SearchFine, DeleteFine } from "@interfaces/fine.interface";
+import {
+  ChargeFineParams,
+  SearchFineParams,
+  DeleteFineParams,
+} from "@interfaces/fine.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
 
 export class LoanService {
-  private readonly logger = Logger("LoanService");
+  private readonly logger = Logger("FineService");
 
-  async chargeFine(params: { data: ChargeFine }) {
+  async chargeFine(params: { data: ChargeFineParams }) {
     const newFine = await repositories.fines.create(params);
 
     if (!newFine) {
@@ -19,7 +23,7 @@ export class LoanService {
     return newFine;
   }
 
-  async searchFine(params: SearchFine) {
+  async searchFine(params: SearchFineParams) {
     const { userId } = params;
     const existingFine = await repositories.fines.findByUserId(userId);
 
@@ -30,7 +34,7 @@ export class LoanService {
     return existingFine;
   }
 
-  async deleteFine(params: DeleteFine) {
+  async deleteFine(params: DeleteFineParams) {
     const { id } = params;
     const existingFine = await repositories.fines.deleteById(id);
 

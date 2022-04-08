@@ -1,12 +1,12 @@
-export interface ChargeFine {
+export interface ChargeFineParams {
   value: string;
   loanId: number;
 }
 
-export interface SearchFine {
+export interface SearchFineParams {
   userId: number;
 }
 
-export interface DeleteFine {
+export interface DeleteFineParams {
   id: number;
 }

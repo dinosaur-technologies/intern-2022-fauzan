@@ -6,7 +6,7 @@ import {
 import {
   SigninParams,
   SignupParams,
-  Recover,
+  RecoverParams,
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -50,7 +50,7 @@ export class UserService {
     return newUser;
   }
 
-  async recover(params: Recover) {
+  async recover(params: RecoverParams) {
     const { email } = params;
 
     const existing = await repositories.users.findOneByEmail(email);

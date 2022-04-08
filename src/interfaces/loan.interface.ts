@@ -1,14 +1,14 @@
-export interface LoanBook {
+export interface LoanBookParams {
     bookId: number;
     userId: number;
     startDate: string;
   }
   
-  export interface FindLoan {
+  export interface FindLoanParams {
     userId: number;
   }
   
-  export interface DeleteLoan {
+  export interface DeleteLoanParams {
     id: number;
   }
   

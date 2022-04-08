@@ -2,14 +2,18 @@ import {
   ConflictException,
   NotFoundException,
 } from "@exceptions/http-exception";
-import { LoanBook, FindLoan, DeleteLoan } from "@interfaces/loan.interface";
+import {
+  LoanBookParams,
+  FindLoanParams,
+  DeleteLoanParams,
+} from "@interfaces/loan.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
 
 export class BookService {
-  private readonly logger = Logger("BookService");
+  private readonly logger = Logger("LoanService");
 
-  async loanBook(params: { data: LoanBook }) {
+  async loanBook(params: { data: LoanBookParams }) {
     const newLoan = await repositories.loans.create(params);
 
     if (!newLoan) {
@@ -19,7 +23,7 @@ export class BookService {
     return newLoan;
   }
 
-  async findLoan(params: FindLoan) {
+  async findLoan(params: FindLoanParams) {
     const { userId } = params;
     const existingLoan = await repositories.loans.findByUserId(userId);
 
@@ -30,7 +34,7 @@ export class BookService {
     return existingLoan;
   }
 
-  async deleteLoan(params: DeleteLoan) {
+  async deleteLoan(params: DeleteLoanParams) {
     const { id } = params;
     const existingLoan = await repositories.loans.deleteById(id);
 

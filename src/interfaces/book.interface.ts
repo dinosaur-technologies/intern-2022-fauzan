@@ -1,4 +1,4 @@
-export interface RegisterBook {
+export interface RegisterBookParams {
   title: string;
   author: string;
   publisher: string;
@@ -8,7 +8,7 @@ export interface RegisterBook {
   createdBy: number;
 }
 
-export interface UpdateBook {
+export interface UpdateBookParams {
   id: number;
   title: string;
   author: string;
@@ -21,6 +21,6 @@ export interface UpdateBook {
   updatedAt: string;
 }
 
-export interface FindBook {
+export interface FindBookParams {
   title: string;
 }

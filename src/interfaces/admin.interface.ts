@@ -9,6 +9,6 @@ export interface SignupParams {
   password: string;
 }
 
-export interface Recover {
+export interface RecoverParams {
   email: string;
 }

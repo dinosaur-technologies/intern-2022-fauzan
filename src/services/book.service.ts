@@ -2,14 +2,18 @@ import {
   NotFoundException,
   ConflictException,
 } from "@exceptions/http-exception";
-import { RegisterBook, UpdateBook, FindBook } from "@interfaces/book.interface";
+import {
+  RegisterBookParams,
+  UpdateBookParams,
+  FindBookParams,
+} from "@interfaces/book.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
 
 export class BookService {
   private readonly logger = Logger("BookService");
 
-  async registerBook(params: { data: RegisterBook }) {
+  async registerBook(params: { data: RegisterBookParams }) {
     const newBook = await repositories.books.create(params);
 
     if (!newBook) {
@@ -19,7 +23,7 @@ export class BookService {
     return newBook;
   }
 
-  async updateBook(params: UpdateBook) {
+  async updateBook(params: UpdateBookParams) {
     const { id } = params;
     const updating = await repositories.books.updateById({
       data: params,
@@ -33,7 +37,7 @@ export class BookService {
     return updating;
   }
 
-  async searchBook(params: FindBook) {
+  async searchBook(params: FindBookParams) {
     const { title } = params;
     const existingBook = await repositories.books.findOneByTitle(title);
 
