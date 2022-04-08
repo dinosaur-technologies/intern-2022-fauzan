@@ -14,10 +14,30 @@ export class AdminsRepository {
   }
 
   async deleteById(id: number) {
-    return prisma.admin.delete({ where: { id } });
+    return prisma.admin.delete({
+      where: {
+        id
+      }
+    });
+  }
+
+  async findFirst(params: Prisma.AdminFindFirstArgs) {
+    return prisma.admin.findFirst(params);
+  }
+
+  async findOneByEmail(email: string) {
+    return this.findFirst({
+      where: {
+        email,
+      },
+    });
   }
 
   async findOnebyId(id: number) {
-    return prisma.admin.findUnique({ where: { id } });
+    return prisma.admin.findUnique({
+      where: {
+        id
+      }
+    });
   }
 }
