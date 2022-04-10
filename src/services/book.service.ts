@@ -13,8 +13,15 @@ import { repositories } from "@repositories/index.repository";
 export class BookService {
   private readonly logger = Logger("BookService");
 
-  async registerBook(params: { data: RegisterBookParams }) {
-    const newBook = await repositories.books.create(params);
+  async registerBook(params: RegisterBookParams ) {
+    const {title} = params
+    const existing = await repositories.books.findOneByTitle(title);
+
+    if (existing) {
+      throw new ConflictException("The title already exist");;
+    }
+
+    const newBook = await repositories.books.create({data : params});
 
     if (!newBook) {
       throw new ConflictException("Request could not be processed");
