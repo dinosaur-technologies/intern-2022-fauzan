@@ -7,14 +7,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 generator dbml {
   provider = "prisma-dbml-generator"
 }
 
 model Admin {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
   username  String
   password  String
   createdAt DateTime @default(now())
@@ -23,39 +22,38 @@ model Admin {
   Books Book[]
 }
 
-model  Book{
-  id    Int     @default(autoincrement()) @id
-  title String  @unique
-  author  String
-  publisher  String
-  year Int
-  description String
-  ISBN String
-  creatorAdmin Admin @relation(fields: [createdBy], references: [id])
-  createdBy Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Book {
+  id           Int      @id @default(autoincrement())
+  title        String   @unique
+  author       String
+  publisher    String
+  year         Int
+  description  String
+  ISBN         String
+  creatorAdmin Admin    @relation(fields: [createdBy], references: [id])
+  createdBy    Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   Loans Loan[]
 }
 
-
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  phone_number String
-  username  String
-  password  String
+  id           Int    @id @default(autoincrement())
+  email        String @unique
+  phoneNumber String
+  username     String
+  password     String
 
   Loans Loan[]
 }
 
 model Loan {
-  id    Int     @default(autoincrement()) @id
-  books    Book   @relation(fields: [bookId], references: [id])
-  bookId  Int
-  users    User   @relation(fields: [userId], references: [id])
-  userId  Int
+  id        Int      @id @default(autoincrement())
+  books     Book     @relation(fields: [bookId], references: [id])
+  bookId    Int
+  users     User     @relation(fields: [userId], references: [id])
+  userId    Int
   startDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,13 +61,11 @@ model Loan {
   Fines Fine[]
 }
 
-
 model Fine {
-  id    Int     @default(autoincrement()) @id
-  value String
-  loan  Loan   @relation(fields: [loanId], references: [id])
-  loanId  Int
+  id        Int      @id @default(autoincrement())
+  value     String
+  loan      Loan     @relation(fields: [loanId], references: [id])
+  loanId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-

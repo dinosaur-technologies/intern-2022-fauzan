@@ -20,4 +20,12 @@ export class UsersRepository {
   async findOnebyId(id: number) {
     return prisma.user.findUnique({ where: { id } });
   }
+
+  async findOneByEmail(email: string) {
+    return prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+  }
 }

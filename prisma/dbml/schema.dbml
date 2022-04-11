@@ -30,7 +30,7 @@ Table Book {
 Table User {
   id Int [pk, increment]
   email String [unique, not null]
-  phone_number String [not null]
+  phoneNumber String [not null]
   username String [not null]
   password String [not null]
   Loans Loan [not null]

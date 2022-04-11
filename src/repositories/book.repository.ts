@@ -14,15 +14,16 @@ export class BooksRepository {
     return prisma.book.delete({ where: { id } });
   }
 
-  async updateById(params: Prisma.BookUpdateArgs, id: number) {
+  async updateById(params: {data: Prisma.BookUpdateInput, where: {id: number}}) {
+    const { where, data } = params;
     return prisma.book.update({
-      data: params.data,
-      where: { id },
+      data,
+      where,
     });
   }
 
-  async findOnebyId(id: number) {
-    return prisma.book.findUnique({ where: { id } });
+  async findOneByTitle(title: string) {
+    return prisma.book.findUnique({ where: { title } });
   }
 
   async sortByTitle() {
