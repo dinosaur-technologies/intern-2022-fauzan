@@ -10,7 +10,7 @@ import {
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
 
-export class BookService {
+export class LoanService {
   private readonly logger = Logger("LoanService");
 
   async loanBook(params: { data: LoanBookParams }) {
