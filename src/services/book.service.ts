@@ -6,6 +6,8 @@ import {
   RegisterBookParams,
   UpdateBookDetailParams,
   FindBookParams,
+  SortBookParams,
+  DeleteBookParams
 } from "@interfaces/book.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -55,9 +57,16 @@ export class BookService {
     return existingBook;
   }
 
-  async sortBook() {
-    const allBook = await repositories.books.sortByTitle();
+  async sortBook(params: SortBookParams) {
+    const allBook = await repositories.books.sort(params);
 
     return allBook;
+  }
+
+  async deleteBook(params: DeleteBookParams) {
+    const { id } = params;
+    const deleteBook = await repositories.books.deleteById(id);
+    
+    return deleteBook;
   }
 }

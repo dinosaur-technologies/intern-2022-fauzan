@@ -30,11 +30,11 @@ export class BooksRepository {
     return prisma.book.findUnique({ where: { id } });
   }
 
-  async sortByTitle() {
+  async sort(params: Prisma.BookOrderByWithRelationInput) {
     return prisma.book.findMany({
-      orderBy: {
-        title: 'asc',
-      },
+      orderBy: 
+        params,
+      
     });
   }
 }

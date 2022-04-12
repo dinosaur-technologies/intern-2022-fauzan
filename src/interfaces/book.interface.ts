@@ -24,3 +24,15 @@ export interface UpdateBookDetailParams {
 export interface FindBookParams {
   id: number;
 }
+
+export interface SortBookParams {
+  title?
+  author?
+  createdAt?
+  year?
+}
+
+export interface DeleteBookParams {
+  id: number;
+}
+

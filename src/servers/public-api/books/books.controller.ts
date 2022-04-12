@@ -49,9 +49,9 @@ export class BooksController {
   ) {
     try {
 
-      const getbook = await services.books.sortBook();
+      const getBook = await services.books.sortBook(request.body);
       return response.status(200).json({
-        payload: getbook,
+        payload: getBook,
         message: 'It works!'
       });
     } catch (error) {
@@ -69,8 +69,8 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      const getbook = await services.books.searchBook({id: Number(ID)})
-      return response.status(200).json({getbook});
+      const getBook = await services.books.searchBook({id: Number(ID)})
+      return response.status(200).json({getBook});
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -87,11 +87,28 @@ export class BooksController {
     try {
       const { ID } = request.params;
       const id= Number(ID);
-      const updatebook = await services.books.updateBookDetail(request.body, id)
-      return response.status(200).json({updatebook});
+      const updateBook = await services.books.updateBookDetail(request.body, id)
+      return response.status(200).json({updateBook});
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
+
+  @Delete('/:ID')
+    async delete(
+      @Params('ID') ID: string,
+      @Request() request: ExpressRequest,
+      @Response() response: ExpressResponse,
+      @Next() next: ExpressNextFunction
+    ) {
+      try {
+        const { ID } = request.params;
+        const deleteBook = await services.books.deleteBook({id: Number(ID)})
+        return response.sendStatus(204);
+      } catch (error) {
+        this.logger.fatal(error);
+        next(error);
+      }
+    }
 }
