@@ -13,8 +13,8 @@ import { repositories } from "@repositories/index.repository";
 export class LoanService {
   private readonly logger = Logger("LoanService");
 
-  async loanBook(params: { data: LoanBookParams }) {
-    const newLoan = await repositories.loans.create(params);
+  async loanBook(params: LoanBookParams) {
+    const newLoan = await repositories.loans.create({data: params});
 
     if (!newLoan) {
       throw new ConflictException("Request could not be processed");

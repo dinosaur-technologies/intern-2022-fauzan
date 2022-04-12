@@ -16,6 +16,9 @@ import {
     Response,
   } from '@decorators/express';
   import { Logger } from '@providers/logger.provider';
+  import { validate } from '@utils/validate.util';
+  import { LoanDto } from '@servers/public-api/loans/loans.dto';
+  import { services } from '@services/index.service';
   
   @Controller('/loans')
   export class LoansController {
@@ -28,61 +31,34 @@ import {
       @Next() next: ExpressNextFunction
     ) {
       try {
-        return response.status(201).json({});
+
+        const body = await validate<LoanDto>(LoanDto, request.body);
+        const createLoan = await services.loans.loanBook(request.body);
+
+        return response.status(201).json({createLoan});
       } catch (error) {
         this.logger.fatal(error);
         next(error);
       }
     }
   
-    @Get('/')
-    async list(
-      @Request() request: ExpressRequest,
-      @Response() response: ExpressResponse,
-      @Next() next: ExpressNextFunction
-    ) {
-      try {
-        return response.status(200).json({
-          message: 'It works!'
-        });
-      } catch (error) {
-        this.logger.fatal(error);
-        next(error);
-      }
-    }
-  
-    @Get('/:ID')
+    @Get('/:userID')
     async get(
-      @Params('ID') ID: string,
+      @Params('userID') userID: string,
       @Request() request: ExpressRequest,
       @Response() response: ExpressResponse,
       @Next() next: ExpressNextFunction
     ) {
       try {
-        const { ID } = request.params;
-        return response.status(200).json({});
+        const { userID } = request.params;
+        const getLoan = await services.loans.findLoan({userId: Number(userID)})
+        return response.status(200).json({getLoan});
       } catch (error) {
         this.logger.fatal(error);
         next(error);
       }
     }
-  
-    @Put('/:ID')
-    async update(
-      @Params('ID') ID: string,
-      @Request() request: ExpressRequest,
-      @Response() response: ExpressResponse,
-      @Next() next: ExpressNextFunction
-    ) {
-      try {
-        const { ID } = request.params;
-        return response.status(200).json({});
-      } catch (error) {
-        this.logger.fatal(error);
-        next(error);
-      }
-    }
-  
+    
     @Delete('/:ID')
     async delete(
       @Params('ID') ID: string,
@@ -92,6 +68,7 @@ import {
     ) {
       try {
         const { ID } = request.params;
+        const deleteLoan = await services.loans.deleteLoan({id: Number(ID)})
         return response.sendStatus(204);
       } catch (error) {
         this.logger.fatal(error);
