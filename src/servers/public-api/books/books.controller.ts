@@ -34,10 +34,7 @@ export class BooksController {
       const body = await validate<BookDto>(BookDto, request.body);
       const registerBook = await services.books.registerBook(request.body);
       
-      return response.status(201).json({
-        body,
-        registerBook
-      });
+      return response.status(201).json({registerBook});
     } catch (error) {
       this.logger.fatal(error);
       next(error);
