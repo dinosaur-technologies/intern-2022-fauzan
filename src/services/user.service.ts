@@ -10,7 +10,7 @@ import {
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-const bcrypt = require("bcryptjs");
+import { bcrypt } from "bcryptjs";
 
 export class UserService {
   private readonly logger = Logger("UserService");

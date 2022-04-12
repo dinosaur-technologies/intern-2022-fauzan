@@ -10,7 +10,7 @@ import {
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-const bcrypt = require("bcryptjs");
+import { bcrypt } from "bcryptjs";
 
 export class AdminService {
   private readonly logger = Logger("AdminService");
