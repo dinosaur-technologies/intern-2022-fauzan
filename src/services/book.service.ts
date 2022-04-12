@@ -31,9 +31,11 @@ export class BookService {
   }
 
   async updateBook(params: UpdateBookParams) {
+    
     const { id } = params;
+    const existingBook = await repositories.books.findOneById(id);
     const updating = await repositories.books.updateById({
-      data: params,
+      data: existingBook,
       where: { id },
     });
 
@@ -45,8 +47,8 @@ export class BookService {
   }
 
   async searchBook(params: FindBookParams) {
-    const { title } = params;
-    const existingBook = await repositories.books.findOneByTitle(title);
+    const { id } = params;
+    const existingBook = await repositories.books.findOneById(id);
 
     if (!existingBook) {
       throw new NotFoundException("Book Not found");
@@ -56,7 +58,7 @@ export class BookService {
   }
 
   async sortBook() {
-    const allBook = await repositories.books.sortByTitle;
+    const allBook = await repositories.books.sortByTitle();
 
     return allBook;
   }

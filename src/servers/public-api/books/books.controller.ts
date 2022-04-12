@@ -18,6 +18,7 @@ import {
 import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { BookDto } from '@servers/public-api/books/books.dto';
+import { services } from '@services/index.service'
 
 @Controller('/books')
 export class BooksController {
@@ -31,8 +32,12 @@ export class BooksController {
   ) {
     try {
       const body = await validate<BookDto>(BookDto, request.body);
-      // TODO: Use BookService to validate and create
-      return response.status(201).json(body);
+      const registerBook = await services.books.registerBook(request.body);
+      
+      return response.status(201).json({
+        body,
+        registerBook
+      });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -46,7 +51,10 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
+
+      const getbook = await services.books.sortBook();
       return response.status(200).json({
+        payload: getbook,
         message: 'It works!'
       });
     } catch (error) {
@@ -64,7 +72,8 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      return response.status(200).json({});
+      const getbook = await services.books.searchBook({id: Number(ID)})
+      return response.status(200).json({getbook});
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -80,23 +89,8 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      return response.status(200).json({});
-    } catch (error) {
-      this.logger.fatal(error);
-      next(error);
-    }
-  }
-
-  @Delete('/:ID')
-  async delete(
-    @Params('ID') ID: string,
-    @Request() request: ExpressRequest,
-    @Response() response: ExpressResponse,
-    @Next() next: ExpressNextFunction
-  ) {
-    try {
-      const { ID } = request.params;
-      return response.sendStatus(204);
+      const updatebook = await services.books.updateBook({id: Number(ID)})
+      return response.status(200).json({updatebook});
     } catch (error) {
       this.logger.fatal(error);
       next(error);
