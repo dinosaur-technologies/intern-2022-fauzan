@@ -86,7 +86,8 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      const updatebook = await services.books.updateBook({id: Number(ID)})
+      const id= Number(ID);
+      const updatebook = await services.books.updateBookDetail(request.body, id)
       return response.status(200).json({updatebook});
     } catch (error) {
       this.logger.fatal(error);

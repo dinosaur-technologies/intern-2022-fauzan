@@ -4,7 +4,7 @@ import {
 } from "@exceptions/http-exception";
 import {
   RegisterBookParams,
-  UpdateBookParams,
+  UpdateBookDetailParams,
   FindBookParams,
 } from "@interfaces/book.interface";
 import { Logger } from "@providers/logger.provider";
@@ -30,12 +30,10 @@ export class BookService {
     return newBook;
   }
 
-  async updateBook(params: UpdateBookParams) {
+  async updateBookDetail(params: UpdateBookDetailParams, id: number) {
     
-    const { id } = params;
-    const existingBook = await repositories.books.findOneById(id);
     const updating = await repositories.books.updateById({
-      data: existingBook,
+      data: params,
       where: { id },
     });
 
