@@ -4,7 +4,7 @@ export interface ChargeFineParams {
 }
 
 export interface SearchFineParams {
-  userId: number;
+  loanId: number;
 }
 
 export interface DeleteFineParams {

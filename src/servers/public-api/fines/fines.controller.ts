@@ -15,7 +15,10 @@ import {
     Response,
   } from '@decorators/express';
   import { Logger } from '@providers/logger.provider';
-  
+  import { validate } from '@utils/validate.util';
+  import { FineDto } from '@servers/public-api/fines/fines.dto';
+  import { services } from '@services/index.service';
+
   @Controller('/fines')
   export class FinesController {
     private readonly logger = Logger('FinesController');
@@ -27,39 +30,28 @@ import {
       @Next() next: ExpressNextFunction
     ) {
       try {
-        return response.status(201).json({});
+        const body = await validate<FineDto>(FineDto, request.body);
+        const fineCharged = await services.fines.chargeFine(request.body);
+
+        return response.status(201).json({fineCharged});
       } catch (error) {
         this.logger.fatal(error);
         next(error);
       }
     }
   
-    @Get('/')
-    async list(
-      @Request() request: ExpressRequest,
-      @Response() response: ExpressResponse,
-      @Next() next: ExpressNextFunction
-    ) {
-      try {
-        return response.status(200).json({
-          message: 'It works!'
-        });
-      } catch (error) {
-        this.logger.fatal(error);
-        next(error);
-      }
-    }
-  
-    @Get('/:ID')
+    @Get('/:LoanID')
     async get(
-      @Params('ID') ID: string,
-      @Request() request: ExpressRequest,
+      @Params('LoanID') LoanID: string,
+      @Request() request: ExpressRequest, 
       @Response() response: ExpressResponse,
       @Next() next: ExpressNextFunction
     ) {
       try {
-        const { ID } = request.params;
-        return response.status(200).json({});
+        const { LoanID } = request.params;
+        const getFine = await services.fines.searchFine({loanId: Number(LoanID)})
+
+        return response.status(200).json({getFine});
       } catch (error) {
         this.logger.fatal(error);
         next(error);
@@ -75,6 +67,7 @@ import {
     ) {
       try {
         const { ID } = request.params;
+        const deleteFine = await services.fines.deleteFine({id: Number(ID)})
         return response.sendStatus(204);
       } catch (error) {
         this.logger.fatal(error);
