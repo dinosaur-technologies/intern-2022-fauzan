@@ -10,7 +10,7 @@ import {
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-import { bcrypt } from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 export class AdminService {
   private readonly logger = Logger("AdminService");
@@ -34,12 +34,14 @@ export class AdminService {
 
   async signup(params: SignupParams) {
     const { email, username, password } = params;
-    const hashedPassword = bcrypt.hash(password, 10);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
     const newAdmin = await repositories.admins.create({
       data: {
         email,
         username,
-        password: hashedPassword,
+        password: hash,
       },
     });
 

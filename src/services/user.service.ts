@@ -10,7 +10,7 @@ import {
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-import { bcrypt } from "bcryptjs";
+import  bcrypt  from "bcryptjs";
 
 export class UserService {
   private readonly logger = Logger("UserService");
@@ -33,13 +33,15 @@ export class UserService {
 
   async signup(params: SignupParams) {
     const { email, username, phoneNumber, password } = params;
-    const hashedPassword = bcrypt.hash(password, 10);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
     const newUser = await repositories.users.create({
       data: {
         email,
         username,
         phoneNumber,
-        password: hashedPassword,
+        password: hash,
       },
     });
 
