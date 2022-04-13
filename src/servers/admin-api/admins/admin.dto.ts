@@ -21,3 +21,12 @@ export class SignUpDto {
   password: string;
 
 }
+
+export class ResetPassDto {
+  @IsDefined({
+    message: 'New Password is required',
+  })
+  @MinLength(4)
+  newPassword: string;
+
+}

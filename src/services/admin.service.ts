@@ -6,7 +6,8 @@ import {
 import {
   SigninParams,
   SignupParams,
-  RecoverParams,
+  ResetParams,
+  DeleteAdminParams,
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -52,15 +53,27 @@ export class AdminService {
     return newAdmin;
   }
 
-  async recover(params: RecoverParams) {
-    const { email } = params;
-
+  async resetPassword(params: ResetParams) {
+    const { email, newPassword} = params;
     const existing = await repositories.admins.findOneByEmail(email);
 
     if (!existing) {
       throw new NotFoundException("Email Not Registered");
     }
 
-    return existing.password;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
+    
+    const updating = await repositories.admins.updateByEmail({
+      data: {password: hash,},
+      where: { email },
+    });
+  }
+
+  async deleteAdmin(params: DeleteAdminParams) {
+    const { id } = params;
+    const deleteBook = await repositories.admins.deleteById(id)
+    
+    return deleteBook;
   }
 }
