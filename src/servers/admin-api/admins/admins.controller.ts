@@ -14,6 +14,9 @@ import {
     Response,
   } from '@decorators/express';
   import { Logger } from '@providers/logger.provider';
+  import { validate } from '@utils/validate.util';
+  import { SignUpDto } from '@servers/admin-api/admins/admin.dto';
+  import { services } from '@services/index.service';
   
   @Controller('/admins')
   export class AdminsController {
@@ -26,7 +29,10 @@ import {
       @Next() next: ExpressNextFunction
     ) {
       try {
-        return response.status(201).json({});
+        const body = await validate<SignUpDto>(SignUpDto, request.body);
+        const account = await services.admins.signup(request.body);
+
+        return response.status(201).json({account});
       } catch (error) {
         this.logger.fatal(error);
         next(error);
