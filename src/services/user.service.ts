@@ -6,7 +6,7 @@ import {
 import {
   SigninParams,
   SignupParams,
-  RecoverParams,
+  ResetParams,
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -52,15 +52,20 @@ export class UserService {
     return newUser;
   }
 
-  async recover(params: RecoverParams) {
-    const { email } = params;
-
+  async resetPassword(params: ResetParams) {
+    const { email, newPassword} = params;
     const existing = await repositories.users.findOneByEmail(email);
 
     if (!existing) {
       throw new NotFoundException("Email Not Registered");
     }
 
-    return existing.password;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
+    
+    const updating = await repositories.users.updateByEmail({
+      data: {password: hash,},
+      where: { email },
+    });
   }
 }

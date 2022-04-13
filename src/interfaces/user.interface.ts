@@ -10,6 +10,7 @@ export interface SignupParams {
   phoneNumber: string;
 }
 
-export interface RecoverParams {
+export interface ResetParams {
   email: string;
+  newPassword: string;
 }
