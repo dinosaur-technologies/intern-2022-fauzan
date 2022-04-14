@@ -32,9 +32,11 @@ export class BooksController {
   ) {
     try {
       const body = await validate<BookDto>(BookDto, request.body);
-      const registerBook = await services.books.registerBook(request.body);
+      const book = await services.books.registerBook(request.body);
 
-      return response.status(201).json({ registerBook });
+      return response
+        .status(201)
+        .json({ message: "Book succesfully registered" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -48,11 +50,8 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const getBook = await services.books.sortBook(request.body);
-      return response.status(200).json({
-        payload: getBook,
-        message: "It works!",
-      });
+      const book = await services.books.sortBook(request.body);
+      return response.status(200).json({ payload: book });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -68,8 +67,8 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      const getBook = await services.books.searchBook({ id: Number(ID) });
-      return response.status(200).json({ getBook });
+      const book = await services.books.searchBook({ id: Number(ID) });
+      return response.status(200).json({ book });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -86,11 +85,10 @@ export class BooksController {
     try {
       const { ID } = request.params;
       const id = Number(ID);
-      const updateBook = await services.books.updateBookDetail(
-        request.body,
-        id
-      );
-      return response.status(200).json({ updateBook });
+      const book = await services.books.updateBookDetail(request.body, id);
+      return response
+        .status(200)
+        .json({ message: "Book detail succesfully updated" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -106,7 +104,7 @@ export class BooksController {
   ) {
     try {
       const { ID } = request.params;
-      const deleteBook = await services.books.deleteBook({ id: Number(ID) });
+      const book = await services.books.deleteBook({ id: Number(ID) });
       return response.sendStatus(204);
     } catch (error) {
       this.logger.fatal(error);

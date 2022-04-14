@@ -32,8 +32,10 @@ export class LoansController {
   ) {
     try {
       const body = await validate<LoanDto>(LoanDto, request.body);
-      const createLoan = await services.loans.loanBook(request.body);
-      return response.status(201).json({ createLoan });
+      const loan = await services.loans.loanBook(request.body);
+      return response
+        .status(201)
+        .json({ message: "Successfully created loan" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -49,8 +51,8 @@ export class LoansController {
   ) {
     try {
       const { userID } = request.params;
-      const getLoan = await services.loans.findLoan({ userId: Number(userID) });
-      return response.status(200).json({ getLoan });
+      const loan = await services.loans.findLoan({ userId: Number(userID)});
+      return response.status(200).json({ loan });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -66,7 +68,7 @@ export class LoansController {
   ) {
     try {
       const { ID } = request.params;
-      const deleteLoan = await services.loans.deleteLoan({ id: Number(ID) });
+      const loan = await services.loans.deleteLoan({ id: Number(ID)});
       return response.sendStatus(204);
     } catch (error) {
       this.logger.fatal(error);

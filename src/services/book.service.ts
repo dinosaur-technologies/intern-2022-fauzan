@@ -16,7 +16,7 @@ export class BookService {
   private readonly logger = Logger("BookService");
 
   async registerBook(params: RegisterBookParams ) {
-    const {title} = params
+    const { title } = params
     const existing = await repositories.books.findOneByTitle(title);
 
     if (existing) {
@@ -34,16 +34,16 @@ export class BookService {
 
   async updateBookDetail(params: UpdateBookDetailParams, id: number) {
     
-    const updating = await repositories.books.updateById({
+    const newBookDetail = await repositories.books.updateById({
       data: params,
       where: { id },
     });
 
-    if (!updating) {
+    if (!newBookDetail ) {
       throw new NotFoundException("Book Not found");
     }
 
-    return updating;
+    return newBookDetail ;
   }
 
   async searchBook(params: FindBookParams) {
@@ -65,8 +65,8 @@ export class BookService {
 
   async deleteBook(params: DeleteBookParams) {
     const { id } = params;
-    const deleteBook = await repositories.books.deleteById(id);
+    const book = await repositories.books.deleteById(id);
     
-    return deleteBook;
+    return book;
   }
 }

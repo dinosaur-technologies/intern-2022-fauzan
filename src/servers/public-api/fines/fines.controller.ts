@@ -31,29 +31,29 @@ export class FinesController {
   ) {
     try {
       const body = await validate<FineDto>(FineDto, request.body);
-      const fineCharged = await services.fines.chargeFine(request.body);
+      const fine = await services.fines.chargeFine(request.body);
 
-      return response.status(201).json({ fineCharged });
+      return response.status(201).json({ message: "Fine had been charged" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Get("/:LoanID")
+  @Get("/:loanID")
   async get(
-    @Params("LoanID") LoanID: string,
+    @Params("loanID") loanID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const { LoanID } = request.params;
-      const getFine = await services.fines.searchFine({
-        loanId: Number(LoanID),
+      const { loanID } = request.params;
+      const fine = await services.fines.searchFine({
+        loanId: Number(loanID),
       });
 
-      return response.status(200).json({ getFine });
+      return response.status(200).json({ fine });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -69,7 +69,7 @@ export class FinesController {
   ) {
     try {
       const { ID } = request.params;
-      const deleteFine = await services.fines.deleteFine({ id: Number(ID) });
+      const fine = await services.fines.deleteFine({ id: Number(ID) });
       return response.sendStatus(204);
     } catch (error) {
       this.logger.fatal(error);

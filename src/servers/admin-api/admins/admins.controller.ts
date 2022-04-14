@@ -32,7 +32,9 @@ export class AdminsController {
     try {
       const body = await validate<SignUpDto>(SignUpDto, request.body);
       const account = await services.admins.signup(request.body);
-      return response.status(201).json({ account });
+      return response
+        .status(201)
+        .json({ message: "Account succesfully created" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -40,14 +42,14 @@ export class AdminsController {
   }
 
   @Post("/signin")
-  async authentication(
+  async authenticate(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const accountAuth = await services.admins.signin(request.body);
-      return response.status(201).json({ accountAuth });
+      const account = await services.admins.signin(request.body);
+      return response.status(201).json({ message: "Login sucessful" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -62,8 +64,10 @@ export class AdminsController {
   ) {
     try {
       const body = await validate<ResetPassDto>(ResetPassDto, request.body);
-      const updatePassword = await services.admins.resetPassword(request.body);
-      return response.status(200).json({ message: "Reset password success" });
+      const password = await services.admins.resetPassword(request.body);
+      return response
+        .status(200)
+        .json({ message: "Reset password successful" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -79,7 +83,7 @@ export class AdminsController {
   ) {
     try {
       const { ID } = request.params;
-      const deleteAdmin = await services.admins.deleteAdmin({ id: Number(ID) });
+      const admin = await services.admins.deleteAdmin({ id: Number(ID) });
       return response.sendStatus(204);
     } catch (error) {
       this.logger.fatal(error);

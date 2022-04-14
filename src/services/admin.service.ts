@@ -11,7 +11,7 @@ import {
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-import {hashSync, compare} from "bcryptjs";
+import { hashSync, compare } from "bcryptjs";
 
 export class AdminService {
   private readonly logger = Logger("AdminService");
@@ -53,7 +53,7 @@ export class AdminService {
   }
 
   async resetPassword(params: ResetParams) {
-    const { email, newPassword} = params;
+    const { email, newPassword } = params;
     const existing = await repositories.admins.findOneByEmail(email);
 
     if (!existing) {
@@ -62,7 +62,7 @@ export class AdminService {
 
     const hash = hashSync(newPassword);
     
-    const updating = await repositories.admins.updateByEmail({
+    const pass = await repositories.admins.updateByEmail({
       data: {password: hash,},
       where: { email },
     });
@@ -70,8 +70,6 @@ export class AdminService {
 
   async deleteAdmin(params: DeleteAdminParams) {
     const { id } = params;
-    const deleteBook = await repositories.admins.deleteById(id)
-    
-    return deleteBook;
+    const admin = await repositories.admins.deleteById(id)
   }
 }

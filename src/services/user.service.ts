@@ -61,7 +61,7 @@ export class UserService {
 
     const hash = hashSync(newPassword);
     
-    const updating = await repositories.users.updateByEmail({
+    const pass = await repositories.users.updateByEmail({
       data: {password: hash,},
       where: { email },
     });

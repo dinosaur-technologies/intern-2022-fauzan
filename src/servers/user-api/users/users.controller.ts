@@ -31,7 +31,9 @@ export class UsersController {
     try {
       const body = await validate<SignUpDto>(SignUpDto, request.body);
       const account = await services.users.signup(request.body);
-      return response.status(201).json({ account });
+      return response
+        .status(201)
+        .json({ message: "Account successfully created" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -39,14 +41,14 @@ export class UsersController {
   }
 
   @Post("/signin")
-  async authentication(
+  async authenticate(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const accountAuth = await services.users.signin(request.body);
-      return response.status(201).json({ accountAuth });
+      const account = await services.users.signin(request.body);
+      return response.status(201).json({ message: "Login successful" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -61,8 +63,10 @@ export class UsersController {
   ) {
     try {
       const body = await validate<ResetPassDto>(ResetPassDto, request.body);
-      const updatePassword = await services.users.resetPassword(request.body);
-      return response.status(200).json({ message: "Reset password success" });
+      const password = await services.users.resetPassword(request.body);
+      return response
+        .status(200)
+        .json({ message: "Reset password successful" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
