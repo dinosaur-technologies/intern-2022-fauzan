@@ -10,7 +10,7 @@ import {
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-import  bcrypt  from "bcryptjs";
+import {hashSync, compare} from "bcryptjs";
 
 export class UserService {
   private readonly logger = Logger("UserService");
@@ -23,7 +23,7 @@ export class UserService {
       throw new UnauthorizedException("Invalid Credentials");
     }
 
-    const validPassword = await bcrypt.compare(password, existing.password);
+    const validPassword = await compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");
@@ -33,8 +33,7 @@ export class UserService {
 
   async signup(params: SignupParams) {
     const { email, username, phoneNumber, password } = params;
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
+    const hash = hashSync(password);
 
     const newUser = await repositories.users.create({
       data: {
@@ -60,8 +59,7 @@ export class UserService {
       throw new NotFoundException("Email Not Registered");
     }
 
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(newPassword, salt);
+    const hash = hashSync(newPassword);
     
     const updating = await repositories.users.updateByEmail({
       data: {password: hash,},

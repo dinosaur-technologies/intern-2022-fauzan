@@ -11,7 +11,7 @@ import {
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-import bcrypt from "bcryptjs";
+import {hashSync, compare} from "bcryptjs";
 
 export class AdminService {
   private readonly logger = Logger("AdminService");
@@ -24,7 +24,7 @@ export class AdminService {
       throw new UnauthorizedException("Invalid Credentials");
     }
 
-    const validPassword = await bcrypt.compare(password, existing.password);
+    const validPassword = await compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");
@@ -35,8 +35,7 @@ export class AdminService {
 
   async signup(params: SignupParams) {
     const { email, username, password } = params;
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
+    const hash = hashSync(password);
 
     const newAdmin = await repositories.admins.create({
       data: {
@@ -61,8 +60,7 @@ export class AdminService {
       throw new NotFoundException("Email Not Registered");
     }
 
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(newPassword, salt);
+    const hash = hashSync(newPassword);
     
     const updating = await repositories.admins.updateByEmail({
       data: {password: hash,},
