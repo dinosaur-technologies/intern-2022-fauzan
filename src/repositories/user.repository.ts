@@ -13,6 +13,14 @@ export class UsersRepository {
     return prisma.user.findMany();
   }
 
+  async updateByEmail(params: {data: {password}, where: {email: string}}) {
+    const { where, data } = params;
+    return prisma.user.update({
+      data,
+      where,
+    });
+  }
+
   async deleteById(id: number) {
     return prisma.user.delete({ where: { id } });
   }

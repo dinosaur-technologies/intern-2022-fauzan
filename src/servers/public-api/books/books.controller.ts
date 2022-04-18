@@ -2,7 +2,7 @@ import {
   ExpressNextFunction,
   ExpressRequest,
   ExpressResponse,
-} from '@interfaces/express.interface';
+} from "@interfaces/express.interface";
 
 import {
   Controller,
@@ -14,16 +14,17 @@ import {
   Put,
   Request,
   Response,
-} from '@decorators/express';
-import { Logger } from '@providers/logger.provider';
-import { validate } from '@utils/validate.util';
-import { BookDto } from '@servers/public-api/books/books.dto';
+} from "@decorators/express";
+import { Logger } from "@providers/logger.provider";
+import { validate } from "@utils/validate.util";
+import { BookDto } from "@servers/public-api/books/books.dto";
+import { services } from "@services/index.service";
 
-@Controller('/books')
+@Controller("/books")
 export class BooksController {
-  private readonly logger = Logger('BooksController');
+  private readonly logger = Logger("BooksController");
 
-  @Post('/')
+  @Post("/")
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -31,71 +32,79 @@ export class BooksController {
   ) {
     try {
       const body = await validate<BookDto>(BookDto, request.body);
-      // TODO: Use BookService to validate and create
-      return response.status(201).json(body);
+      const book = await services.books.registerBook(request.body);
+
+      return response
+        .status(201)
+        .json({ message: "Book succesfully registered" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Get('/')
+  @Get("/")
   async list(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
-      return response.status(200).json({
-        message: 'It works!'
-      });
+      const book = await services.books.sortBook(request.body);
+      return response.status(200).json({ payload: book });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Get('/:ID')
+  @Get("/:ID")
   async get(
-    @Params('ID') ID: string,
+    @Params("ID") ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
       const { ID } = request.params;
-      return response.status(200).json({});
+      const book = await services.books.searchBook({ id: Number(ID) });
+      return response.status(200).json({ book });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Put('/:ID')
+  @Put("/:ID")
   async update(
-    @Params('ID') ID: string,
+    @Params("ID") ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
       const { ID } = request.params;
-      return response.status(200).json({});
+      const id = Number(ID);
+      const book = await services.books.updateBookDetail(request.body, id);
+      return response
+        .status(200)
+        .json({ message: "Book detail succesfully updated" });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Delete('/:ID')
+  @Delete("/:ID")
   async delete(
-    @Params('ID') ID: string,
+    @Params("ID") ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
       const { ID } = request.params;
+      const book = await services.books.deleteBook({ id: Number(ID) });
       return response.sendStatus(204);
     } catch (error) {
       this.logger.fatal(error);

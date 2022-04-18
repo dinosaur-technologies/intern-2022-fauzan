@@ -4,8 +4,10 @@ import {
 } from "@exceptions/http-exception";
 import {
   RegisterBookParams,
-  UpdateBookParams,
+  UpdateBookDetailParams,
   FindBookParams,
+  SortBookParams,
+  DeleteBookParams
 } from "@interfaces/book.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
@@ -14,7 +16,7 @@ export class BookService {
   private readonly logger = Logger("BookService");
 
   async registerBook(params: RegisterBookParams ) {
-    const {title} = params
+    const { title } = params
     const existing = await repositories.books.findOneByTitle(title);
 
     if (existing) {
@@ -30,23 +32,23 @@ export class BookService {
     return newBook;
   }
 
-  async updateBook(params: UpdateBookParams) {
-    const { id } = params;
-    const updating = await repositories.books.updateById({
+  async updateBookDetail(params: UpdateBookDetailParams, id: number) {
+    
+    const newBookDetail = await repositories.books.updateById({
       data: params,
       where: { id },
     });
 
-    if (!updating) {
+    if (!newBookDetail ) {
       throw new NotFoundException("Book Not found");
     }
 
-    return updating;
+    return newBookDetail ;
   }
 
   async searchBook(params: FindBookParams) {
-    const { title } = params;
-    const existingBook = await repositories.books.findOneByTitle(title);
+    const { id } = params;
+    const existingBook = await repositories.books.findOneById(id);
 
     if (!existingBook) {
       throw new NotFoundException("Book Not found");
@@ -55,9 +57,16 @@ export class BookService {
     return existingBook;
   }
 
-  async sortBook() {
-    const allBook = await repositories.books.sortByTitle;
+  async sortBook(params: SortBookParams) {
+    const allBook = await repositories.books.sort(params);
 
     return allBook;
+  }
+
+  async deleteBook(params: DeleteBookParams) {
+    const { id } = params;
+    const book = await repositories.books.deleteById(id);
+    
+    return book;
   }
 }

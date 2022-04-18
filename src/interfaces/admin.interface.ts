@@ -9,6 +9,11 @@ export interface SignupParams {
   password: string;
 }
 
-export interface RecoverParams {
+export interface ResetParams {
   email: string;
+  newPassword: string;
+}
+
+export interface DeleteAdminParams {
+  id: number
 }

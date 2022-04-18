@@ -8,7 +8,7 @@ export interface RegisterBookParams {
   createdBy: number;
 }
 
-export interface UpdateBookParams {
+export interface UpdateBookDetailParams {
   id: number;
   title: string;
   author: string;
@@ -22,5 +22,17 @@ export interface UpdateBookParams {
 }
 
 export interface FindBookParams {
-  title: string;
+  id: number;
 }
+
+export interface SortBookParams {
+  title?
+  author?
+  createdAt?
+  year?
+}
+
+export interface DeleteBookParams {
+  id: number;
+}
+

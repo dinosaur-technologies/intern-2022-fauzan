@@ -13,6 +13,14 @@ export class AdminsRepository {
     return prisma.admin.findMany();
   }
 
+  async updateByEmail(params: {data: {password}, where: {email: string}}) {
+    const { where, data } = params;
+    return prisma.admin.update({
+      data,
+      where,
+    });
+  }
+
   async deleteById(id: number) {
     return prisma.admin.delete({
       where: {

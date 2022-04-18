@@ -6,11 +6,11 @@ import {
 import {
   SigninParams,
   SignupParams,
-  RecoverParams,
+  ResetParams,
 } from "@interfaces/user.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-const bcrypt = require("bcrypt");
+import {hashSync, compare} from "bcryptjs";
 
 export class UserService {
   private readonly logger = Logger("UserService");
@@ -23,7 +23,7 @@ export class UserService {
       throw new UnauthorizedException("Invalid Credentials");
     }
 
-    const validPassword = await bcrypt.compare(password, existing.password);
+    const validPassword = await compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");
@@ -33,13 +33,14 @@ export class UserService {
 
   async signup(params: SignupParams) {
     const { email, username, phoneNumber, password } = params;
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hash = hashSync(password);
+
     const newUser = await repositories.users.create({
       data: {
         email,
         username,
         phoneNumber,
-        password: hashedPassword,
+        password: hash,
       },
     });
 
@@ -50,15 +51,19 @@ export class UserService {
     return newUser;
   }
 
-  async recover(params: RecoverParams) {
-    const { email } = params;
-
+  async resetPassword(params: ResetParams) {
+    const { email, newPassword} = params;
     const existing = await repositories.users.findOneByEmail(email);
 
     if (!existing) {
       throw new NotFoundException("Email Not Registered");
     }
 
-    return existing.password;
+    const hash = hashSync(newPassword);
+    
+    const pass = await repositories.users.updateByEmail({
+      data: {password: hash,},
+      where: { email },
+    });
   }
 }

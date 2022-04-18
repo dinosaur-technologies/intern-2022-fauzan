@@ -6,11 +6,12 @@ import {
 import {
   SigninParams,
   SignupParams,
-  RecoverParams,
+  ResetParams,
+  DeleteAdminParams,
 } from "@interfaces/admin.interface";
 import { Logger } from "@providers/logger.provider";
 import { repositories } from "@repositories/index.repository";
-const bcrypt = require("bcrypt");
+import { hashSync, compare } from "bcryptjs";
 
 export class AdminService {
   private readonly logger = Logger("AdminService");
@@ -23,7 +24,7 @@ export class AdminService {
       throw new UnauthorizedException("Invalid Credentials");
     }
 
-    const validPassword = await bcrypt.compare(password, existing.password);
+    const validPassword = await compare(password, existing.password);
 
     if (!validPassword) {
       throw new UnauthorizedException("Invalid Password");
@@ -34,12 +35,13 @@ export class AdminService {
 
   async signup(params: SignupParams) {
     const { email, username, password } = params;
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hash = hashSync(password);
+
     const newAdmin = await repositories.admins.create({
       data: {
         email,
         username,
-        password: hashedPassword,
+        password: hash,
       },
     });
 
@@ -50,15 +52,24 @@ export class AdminService {
     return newAdmin;
   }
 
-  async recover(params: RecoverParams) {
-    const { email } = params;
-
+  async resetPassword(params: ResetParams) {
+    const { email, newPassword } = params;
     const existing = await repositories.admins.findOneByEmail(email);
 
     if (!existing) {
       throw new NotFoundException("Email Not Registered");
     }
 
-    return existing.password;
+    const hash = hashSync(newPassword);
+    
+    const pass = await repositories.admins.updateByEmail({
+      data: {password: hash,},
+      where: { email },
+    });
+  }
+
+  async deleteAdmin(params: DeleteAdminParams) {
+    const { id } = params;
+    const admin = await repositories.admins.deleteById(id)
   }
 }

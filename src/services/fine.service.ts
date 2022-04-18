@@ -13,8 +13,8 @@ import { repositories } from "@repositories/index.repository";
 export class FineService {
   private readonly logger = Logger("FineService");
 
-  async chargeFine(params: { data: ChargeFineParams }) {
-    const newFine = await repositories.fines.create(params);
+  async chargeFine(params: ChargeFineParams ) {
+    const newFine = await repositories.fines.create({data : params});
 
     if (!newFine) {
       throw new ConflictException("Request could not be processed");
@@ -24,8 +24,8 @@ export class FineService {
   }
 
   async searchFine(params: SearchFineParams) {
-    const { userId } = params;
-    const existingFine = await repositories.fines.findByUserId(userId);
+    const { loanId } = params;
+    const existingFine = await repositories.fines.findByLoanId(loanId);
 
     if (!existingFine) {
       throw new NotFoundException("Existing fines not found");
