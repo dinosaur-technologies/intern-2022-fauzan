@@ -49,7 +49,13 @@ export class AdminsController {
   ) {
     try {
       const account = await services.admins.signin(request.body);
-      return response.status(201).json({ message: "Login sucessful" });
+
+      if (account) {
+        request.session.authenticated = true;
+        return response.status(201).json({
+          message: "Login sucessful",
+        });
+      }
     } catch (error) {
       this.logger.fatal(error);
       next(error);
