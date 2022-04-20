@@ -2,7 +2,7 @@ import {
   ExpressNextFunction,
   ExpressRequest,
   ExpressResponse,
-} from "@interfaces/express.interface";
+} from '@interfaces/express.interface';
 
 import {
   Controller,
@@ -14,17 +14,17 @@ import {
   Put,
   Request,
   Response,
-} from "@decorators/express";
-import { Logger } from "@providers/logger.provider";
-import { validate } from "@utils/validate.util";
-import { BookDto } from "@servers/public-api/books/books.dto";
-import { services } from "@services/index.service";
+} from '@decorators/express';
+import { Logger } from '@providers/logger.provider';
+import { validate } from '@utils/validate.util';
+import { BookDto } from '@servers/public-api/books/books.dto';
+import { services } from '@services/index.service';
 
-@Controller("/books")
+@Controller('/books')
 export class BooksController {
-  private readonly logger = Logger("BooksController");
+  private readonly logger = Logger('BooksController');
 
-  @Post("/")
+  @Post('/')
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -34,16 +34,14 @@ export class BooksController {
       const body = await validate<BookDto>(BookDto, request.body);
       const book = await services.books.registerBook(request.body);
 
-      return response
-        .status(201)
-        .json({ message: "Book succesfully registered" });
+      return response.status(201).json({ message: 'Book succesfully registered' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Get("/")
+  @Get('/')
   async list(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -58,9 +56,9 @@ export class BooksController {
     }
   }
 
-  @Get("/:ID")
+  @Get('/:ID')
   async get(
-    @Params("ID") ID: string,
+    @Params('ID') ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
@@ -75,9 +73,9 @@ export class BooksController {
     }
   }
 
-  @Put("/:ID")
+  @Put('/:ID')
   async update(
-    @Params("ID") ID: string,
+    @Params('ID') ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
@@ -86,18 +84,16 @@ export class BooksController {
       const { ID } = request.params;
       const id = Number(ID);
       const book = await services.books.updateBookDetail(request.body, id);
-      return response
-        .status(200)
-        .json({ message: "Book detail succesfully updated" });
+      return response.status(200).json({ message: 'Book detail succesfully updated' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Delete("/:ID")
+  @Delete('/:ID')
   async delete(
-    @Params("ID") ID: string,
+    @Params('ID') ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction

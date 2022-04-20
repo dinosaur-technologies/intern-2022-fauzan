@@ -2,7 +2,7 @@ import {
   ExpressNextFunction,
   ExpressRequest,
   ExpressResponse,
-} from "@interfaces/express.interface";
+} from '@interfaces/express.interface';
 
 import {
   Controller,
@@ -13,17 +13,17 @@ import {
   Post,
   Request,
   Response,
-} from "@decorators/express";
-import { Logger } from "@providers/logger.provider";
-import { validate } from "@utils/validate.util";
-import { FineDto } from "@servers/public-api/fines/fines.dto";
-import { services } from "@services/index.service";
+} from '@decorators/express';
+import { Logger } from '@providers/logger.provider';
+import { validate } from '@utils/validate.util';
+import { FineDto } from '@servers/public-api/fines/fines.dto';
+import { services } from '@services/index.service';
 
-@Controller("/fines")
+@Controller('/fines')
 export class FinesController {
-  private readonly logger = Logger("FinesController");
+  private readonly logger = Logger('FinesController');
 
-  @Post("/")
+  @Post('/')
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -33,16 +33,16 @@ export class FinesController {
       const body = await validate<FineDto>(FineDto, request.body);
       const fine = await services.fines.chargeFine(request.body);
 
-      return response.status(201).json({ message: "Fine had been charged" });
+      return response.status(201).json({ message: 'Fine had been charged' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Get("/:loanID")
+  @Get('/:loanID')
   async get(
-    @Params("loanID") loanID: string,
+    @Params('loanID') loanID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
@@ -60,9 +60,9 @@ export class FinesController {
     }
   }
 
-  @Delete("/:ID")
+  @Delete('/:ID')
   async delete(
-    @Params("ID") ID: string,
+    @Params('ID') ID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction

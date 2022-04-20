@@ -2,27 +2,19 @@ import {
   ExpressNextFunction,
   ExpressRequest,
   ExpressResponse,
-} from "@interfaces/express.interface";
+} from '@interfaces/express.interface';
 
-import {
-  Controller,
-  Get,
-  Next,
-  Post,
-  Put,
-  Request,
-  Response,
-} from "@decorators/express";
-import { Logger } from "@providers/logger.provider";
-import { validate } from "@utils/validate.util";
-import { SignUpDto, ResetPassDto } from "@servers/user-api/users/users.dto";
-import { services } from "@services/index.service";
+import { Controller, Get, Next, Post, Put, Request, Response } from '@decorators/express';
+import { Logger } from '@providers/logger.provider';
+import { validate } from '@utils/validate.util';
+import { SignUpDto, ResetPassDto } from '@servers/user-api/users/users.dto';
+import { services } from '@services/index.service';
 
-@Controller("/users")
+@Controller('/users')
 export class UsersController {
-  private readonly logger = Logger("UsersController");
+  private readonly logger = Logger('UsersController');
 
-  @Post("/")
+  @Post('/')
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -31,16 +23,14 @@ export class UsersController {
     try {
       const body = await validate<SignUpDto>(SignUpDto, request.body);
       const account = await services.users.signup(request.body);
-      return response
-        .status(201)
-        .json({ message: "Account successfully created" });
+      return response.status(201).json({ message: 'Account successfully created' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Post("/signin")
+  @Post('/signin')
   async authenticate(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -48,14 +38,14 @@ export class UsersController {
   ) {
     try {
       const account = await services.users.signin(request.body);
-      return response.status(201).json({ message: "Login successful" });
+      return response.status(201).json({ message: 'Login successful' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
     }
   }
 
-  @Put("/password-reset")
+  @Put('/password-reset')
   async update(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -64,9 +54,7 @@ export class UsersController {
     try {
       const body = await validate<ResetPassDto>(ResetPassDto, request.body);
       const password = await services.users.resetPassword(request.body);
-      return response
-        .status(200)
-        .json({ message: "Reset password successful" });
+      return response.status(200).json({ message: 'Reset password successful' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
