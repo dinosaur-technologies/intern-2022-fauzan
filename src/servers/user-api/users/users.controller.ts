@@ -39,7 +39,7 @@ export class UsersController {
     try {
       const account = await services.users.signin(request.body);
       request.session.account = account;
-      return response.status(201).json({ message: 'Login successful' });
+      return response.status(200).json({ message: 'Login successful' });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
