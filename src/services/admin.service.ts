@@ -66,6 +66,8 @@ export class AdminService {
       data: { password: hash },
       where: { email },
     });
+
+    return pass;
   }
 
   async deleteAdmin(params: DeleteAdminParams) {

@@ -5,7 +5,14 @@ export class AdminsRepository {
   async create(params: Prisma.AdminCreateArgs) {
     return prisma.admin.create({
       data: params.data,
-      select: { email: true, username: true },
+      select: {
+        id: true, 
+        email: true,
+        username: true,
+        password: false,
+        createdAt: true,
+        updatedAt: true
+      },
     });
   }
 
@@ -18,6 +25,14 @@ export class AdminsRepository {
     return prisma.admin.update({
       data,
       where,
+      select: {
+        id: true, 
+        email: true,
+        username: true,
+        password: false,
+        createdAt: true,
+        updatedAt: true
+      },
     });
   }
 
@@ -34,7 +49,7 @@ export class AdminsRepository {
   }
 
   async findOneByEmail(email: string) {
-    return this.findFirst({
+    return prisma.admin.findFirst({
       where: {
         email,
       },
