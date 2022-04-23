@@ -5,7 +5,13 @@ export class UsersRepository {
   async create(params: Prisma.UserCreateArgs) {
     return prisma.user.create({
       data: params.data,
-      select: { email: true, username: true },
+      select: {
+        id: true, 
+        email: true,
+        username: true,
+        phoneNumber: true,
+        password: false,
+      },
     });
   }
 
@@ -18,6 +24,13 @@ export class UsersRepository {
     return prisma.user.update({
       data,
       where,
+      select: {
+        id: true, 
+        email: true,
+        username: true,
+        phoneNumber: true,
+        password: false,
+      },
     });
   }
 
