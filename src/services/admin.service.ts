@@ -62,12 +62,12 @@ export class AdminService {
 
     const hash = hashSync(newPassword);
 
-    const pass = await repositories.admins.updateByEmail({
+    const account = await repositories.admins.updateByEmail({
       data: { password: hash },
       where: { email },
     });
 
-    return pass;
+    return account;
   }
 
   async deleteAdmin(params: DeleteAdminParams) {
