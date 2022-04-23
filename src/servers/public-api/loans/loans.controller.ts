@@ -33,7 +33,7 @@ export class LoansController {
     try {
       const body = await validate<LoanDto>(LoanDto, request.body);
       const loan = await services.loans.loanBook(request.body);
-      return response.status(201).json({ message: 'Successfully created loan' });
+      return response.status(201).json(loan);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -50,7 +50,7 @@ export class LoansController {
     try {
       const { userID } = request.params;
       const loan = await services.loans.findLoan({ userId: Number(userID) });
-      return response.status(200).json({ loan });
+      return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

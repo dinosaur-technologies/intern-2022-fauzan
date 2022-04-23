@@ -34,7 +34,7 @@ export class BooksController {
       const body = await validate<BookDto>(BookDto, request.body);
       const book = await services.books.registerBook(request.body);
 
-      return response.status(201).json({ message: 'Book succesfully registered' });
+      return response.status(201).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -49,7 +49,7 @@ export class BooksController {
   ) {
     try {
       const book = await services.books.sortBook(request.body);
-      return response.status(200).json({ payload: book });
+      return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -66,7 +66,7 @@ export class BooksController {
     try {
       const { ID } = request.params;
       const book = await services.books.searchBook({ id: Number(ID) });
-      return response.status(200).json({ book });
+      return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -84,7 +84,7 @@ export class BooksController {
       const { ID } = request.params;
       const id = Number(ID);
       const book = await services.books.updateBookDetail(request.body, id);
-      return response.status(200).json({ message: 'Book detail succesfully updated' });
+      return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

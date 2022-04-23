@@ -23,7 +23,7 @@ export class UsersController {
     try {
       const body = await validate<SignUpDto>(SignUpDto, request.body);
       const account = await services.users.signup(request.body);
-      return response.status(201).json({ message: 'Account successfully created' });
+      return response.status(201).json(account);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -54,8 +54,8 @@ export class UsersController {
   ) {
     try {
       const body = await validate<ResetPassDto>(ResetPassDto, request.body);
-      const password = await services.users.resetPassword(request.body);
-      return response.status(200).json({ message: 'Reset password successful' });
+      const data = await services.users.resetPassword(request.body);
+      return response.status(200).json(data);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

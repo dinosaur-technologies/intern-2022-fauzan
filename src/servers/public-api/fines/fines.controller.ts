@@ -33,7 +33,7 @@ export class FinesController {
       const body = await validate<FineDto>(FineDto, request.body);
       const fine = await services.fines.chargeFine(request.body);
 
-      return response.status(201).json({ message: 'Fine had been charged' });
+      return response.status(201).json(fine);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -53,7 +53,7 @@ export class FinesController {
         loanId: Number(loanID),
       });
 
-      return response.status(200).json({ fine });
+      return response.status(200).json(fine);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
