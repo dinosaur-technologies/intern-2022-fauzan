@@ -2,32 +2,32 @@ import {
   UnauthorizedException,
   ConflictException,
   NotFoundException,
-} from "@exceptions/http-exception";
+} from '@exceptions/http-exception';
 import {
   SigninParams,
   SignupParams,
   ResetParams,
   DeleteAdminParams,
-} from "@interfaces/admin.interface";
-import { Logger } from "@providers/logger.provider";
-import { repositories } from "@repositories/index.repository";
-import { hashSync, compare } from "bcryptjs";
+} from '@interfaces/admin.interface';
+import { Logger } from '@providers/logger.provider';
+import { repositories } from '@repositories/index.repository';
+import { hashSync, compare } from 'bcryptjs';
 
 export class AdminService {
-  private readonly logger = Logger("AdminService");
+  private readonly logger = Logger('AdminService');
 
   async signin(params: SigninParams) {
     const { email, password } = params;
     const existing = await repositories.admins.findOneByEmail(email);
-    
+
     if (!existing) {
-      throw new UnauthorizedException("Invalid Credentials");
+      throw new UnauthorizedException('Invalid Credentials');
     }
 
     const validPassword = await compare(password, existing.password);
 
     if (!validPassword) {
-      throw new UnauthorizedException("Invalid Password");
+      throw new UnauthorizedException('Invalid Password');
     }
 
     return existing;
@@ -46,7 +46,7 @@ export class AdminService {
     });
 
     if (!newAdmin) {
-      throw new ConflictException("Signup error because of conflict in request");
+      throw new ConflictException('Signup error because of conflict in request');
     }
 
     return newAdmin;
@@ -57,19 +57,21 @@ export class AdminService {
     const existing = await repositories.admins.findOneByEmail(email);
 
     if (!existing) {
-      throw new NotFoundException("Email Not Registered");
+      throw new NotFoundException('Email Not Registered');
     }
 
     const hash = hashSync(newPassword);
-    
-    const pass = await repositories.admins.updateByEmail({
-      data: {password: hash,},
+
+    const account = await repositories.admins.updateByEmail({
+      data: { password: hash },
       where: { email },
     });
+
+    return account;
   }
 
   async deleteAdmin(params: DeleteAdminParams) {
     const { id } = params;
-    const admin = await repositories.admins.deleteById(id)
+    const admin = await repositories.admins.deleteById(id);
   }
 }

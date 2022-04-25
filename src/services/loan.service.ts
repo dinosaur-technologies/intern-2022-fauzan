@@ -1,23 +1,16 @@
-import {
-  ConflictException,
-  NotFoundException,
-} from "@exceptions/http-exception";
-import {
-  LoanBookParams,
-  FindLoanParams,
-  DeleteLoanParams,
-} from "@interfaces/loan.interface";
-import { Logger } from "@providers/logger.provider";
-import { repositories } from "@repositories/index.repository";
+import { ConflictException, NotFoundException } from '@exceptions/http-exception';
+import { LoanBookParams, FindLoanParams, DeleteLoanParams } from '@interfaces/loan.interface';
+import { Logger } from '@providers/logger.provider';
+import { repositories } from '@repositories/index.repository';
 
 export class LoanService {
-  private readonly logger = Logger("LoanService");
+  private readonly logger = Logger('LoanService');
 
   async loanBook(params: LoanBookParams) {
-    const newLoan = await repositories.loans.create({data: params});
+    const newLoan = await repositories.loans.create({ data: params });
 
     if (!newLoan) {
-      throw new ConflictException("Request could not be processed");
+      throw new ConflictException('Request could not be processed');
     }
 
     return newLoan;
@@ -28,7 +21,7 @@ export class LoanService {
     const existingLoan = await repositories.loans.findByUserId(userId);
 
     if (!existingLoan) {
-      throw new NotFoundException("Existing loans not found");
+      throw new NotFoundException('Existing loans not found');
     }
 
     return existingLoan;
@@ -39,7 +32,7 @@ export class LoanService {
     const existingLoan = await repositories.loans.deleteById(id);
 
     if (!existingLoan) {
-      throw new NotFoundException("Existing loans not found");
+      throw new NotFoundException('Existing loans not found');
     }
 
     return existingLoan;

@@ -1,49 +1,45 @@
-import {
-  NotFoundException,
-  ConflictException,
-} from "@exceptions/http-exception";
+import { NotFoundException, ConflictException } from '@exceptions/http-exception';
 import {
   RegisterBookParams,
   UpdateBookDetailParams,
   FindBookParams,
   SortBookParams,
-  DeleteBookParams
-} from "@interfaces/book.interface";
-import { Logger } from "@providers/logger.provider";
-import { repositories } from "@repositories/index.repository";
+  DeleteBookParams,
+} from '@interfaces/book.interface';
+import { Logger } from '@providers/logger.provider';
+import { repositories } from '@repositories/index.repository';
 
 export class BookService {
-  private readonly logger = Logger("BookService");
+  private readonly logger = Logger('BookService');
 
-  async registerBook(params: RegisterBookParams ) {
-    const { title } = params
+  async registerBook(params: RegisterBookParams) {
+    const { title } = params;
     const existing = await repositories.books.findOneByTitle(title);
 
     if (existing) {
-      throw new ConflictException("The title already exist");;
+      throw new ConflictException('The title already exist');
     }
 
-    const newBook = await repositories.books.create({data : params});
+    const newBook = await repositories.books.create({ data: params });
 
     if (!newBook) {
-      throw new ConflictException("Request could not be processed");
+      throw new ConflictException('Request could not be processed');
     }
 
     return newBook;
   }
 
   async updateBookDetail(params: UpdateBookDetailParams, id: number) {
-    
     const newBookDetail = await repositories.books.updateById({
       data: params,
       where: { id },
     });
 
-    if (!newBookDetail ) {
-      throw new NotFoundException("Book Not found");
+    if (!newBookDetail) {
+      throw new NotFoundException('Book Not found');
     }
 
-    return newBookDetail ;
+    return newBookDetail;
   }
 
   async searchBook(params: FindBookParams) {
@@ -51,7 +47,7 @@ export class BookService {
     const existingBook = await repositories.books.findOneById(id);
 
     if (!existingBook) {
-      throw new NotFoundException("Book Not found");
+      throw new NotFoundException('Book Not found');
     }
 
     return existingBook;
@@ -66,7 +62,7 @@ export class BookService {
   async deleteBook(params: DeleteBookParams) {
     const { id } = params;
     const book = await repositories.books.deleteById(id);
-    
+
     return book;
   }
 }

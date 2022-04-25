@@ -6,7 +6,7 @@ import express, { json, urlencoded } from 'express';
 import { Router } from 'express';
 import requestID from 'express-request-id';
 import morgan from 'morgan';
-
+import session from 'express-session';
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -24,10 +24,19 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
     json(),
     urlencoded({
       extended: false,
-    }),
+    })
   );
 
   app.set('trust proxy', 1);
+
+  app.use(
+    session({
+      secret: 'keyboard cat',
+      resave: true,
+      cookie: { maxAge: 60000 },
+      saveUninitialized: true,
+    })
+  );
 
   const router = Router();
   attachControllers(router, controllers);
