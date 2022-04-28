@@ -3002,12 +3002,12 @@ express-mung@^0.5.1:
   resolved "https://registry.yarnpkg.com/express-mung/-/express-mung-0.5.1.tgz#403ca3710745a208c676f1024314f1ead139919a"
   integrity sha512-5M8Oi2s9ePuP86YMyLT+hefWPPGxuxW3Vnuni/Hq3r2nGE0L4qulG0HkWuc4PIOpzZuZTwONwyfBFtR2xlnfgg==
 
-express-request-id@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/express-request-id/-/express-request-id-2.0.1.tgz#2ef8239a2351345c95dba4814f1c94c639b15eda"
-  integrity sha512-td1hhLQUvrw2YgA5xlXBduf3LBrZwIQWh1V+9FXwG8pwataab8JQMeD3uWhwa5lNC8bFGcbNdTcQGGia6HJDHQ==
+express-request-id@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/express-request-id/-/express-request-id-1.4.1.tgz#66feaf1f0be3deca13f3abfe1c098e49b12f2c28"
+  integrity sha512-qpxK6XhDYtdx9FvxwCHkUeZVWtkGbWR87hBAzGECfwYF/QQCPXEwwB2/9NGkOR1tT7/aLs9mma3CT0vjSzuZVw==
   dependencies:
-    uuid "^8.3.2"
+    uuid "^3.3.2"
 
 express-session@^1.17.2:
   version "1.17.2"
@@ -6060,7 +6060,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@8.3.2, uuid@^8.3.2:
+uuid@8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

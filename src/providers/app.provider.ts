@@ -31,6 +31,8 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
 
   app.set('trust proxy', 1);
 
+  app.use(requestID());
+
   app.use(
     session({
       secret: 'keyboard cat',

@@ -58,7 +58,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-mung": "^0.5.1",
-    "express-request-id": "^2.0.1",
+    "express-request-id": "^1.4.1",
     "express-session": "^1.17.2",
     "morgan": "^1.10.0",
     "pascal-case": "^3.1.2",
