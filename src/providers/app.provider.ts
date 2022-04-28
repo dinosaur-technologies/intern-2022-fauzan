@@ -7,6 +7,8 @@ import { Router } from 'express';
 import requestID from 'express-request-id';
 import morgan from 'morgan';
 import session from 'express-session';
+import mung from 'express-mung';
+import { transform } from '@middlewares/transform.middleware'
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -37,6 +39,8 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
       saveUninitialized: true,
     })
   );
+
+  app.use(mung.json(transform()));
 
   const router = Router();
   attachControllers(router, controllers);
