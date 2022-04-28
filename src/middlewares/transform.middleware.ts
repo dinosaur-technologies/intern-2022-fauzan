@@ -44,7 +44,6 @@ export const transform = () => {
       });
     } else {
       const data = body;
-      console.log(req.body.id);
       return res.json({
         data,
         meta: {
