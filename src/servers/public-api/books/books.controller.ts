@@ -19,6 +19,7 @@ import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { BookDto } from '@servers/public-api/books/books.dto';
 import { services } from '@services/index.service';
+import { serializePagination } from '@utils/serializePagination.util';
 
 @Controller('/books')
 export class BooksController {
@@ -48,7 +49,16 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const book = await services.books.sortBook(request.body);
+      const page = serializePagination(request).page;
+      const limit = serializePagination(request).limit;
+      const startIndex = (page - 1) * limit;
+      const countData = await services.books.countBook(request.body.filter)
+      const book = await services.books.sortBook(
+        request.body.sort,
+        request.body.filter,
+        startIndex,
+        limit
+      );
       return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);

@@ -16,9 +16,13 @@ export class LoanService {
     return newLoan;
   }
 
-  async findLoan(params: FindLoanParams) {
+  async findLoan(params: FindLoanParams, startIndex: number, limit: number) {
     const { userId } = params;
-    const existingLoan = await repositories.loans.findByUserId(userId);
+    const existingLoan = await repositories.loans.findByUserId( {
+      skip: startIndex,
+      take: limit,
+      userId,
+    });
 
     if (!existingLoan) {
       throw new NotFoundException('Existing loans not found');

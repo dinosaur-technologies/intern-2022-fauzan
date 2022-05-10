@@ -1,38 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
 import { dayjs } from '@utils/dayjs.util';
+import { serializePagination } from '@utils/serializePagination.util';
 
-export const transform = () => {
+export const responseSchema = () => {
   return (body: Object, req: Request, res: Response) => {
     const timestamp = dayjs().utc().format();
 
     if (Array.isArray(body)) {
-      let page = Number(req.query.page);
-      let limit = Number(req.query.limit);
-
-      if (page < 1) {
-        page = 1;
-      }
-
-      const MAX_LIMIT = 2;
-
-      if (limit > MAX_LIMIT) {
-        limit = MAX_LIMIT;
-      }
-
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const item = body.slice(startIndex, endIndex);
-      const totalRecord = body.length;
-      const totalPage = body.length / limit;
+      const page = serializePagination(req).page;
+      const limit = serializePagination(req).limit;
 
       return res.json({
         data: {
-          item,
+          body,
           pagination: {
             page: page,
             limit: limit,
-            totalRecords: totalRecord,
-            totalPages: totalPage,
+            // totalRecords: totalRecord,
+            // totalPages: totalPage,
           },
           meta: {
             requestId: req.id,

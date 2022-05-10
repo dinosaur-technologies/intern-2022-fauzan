@@ -49,7 +49,10 @@ export class LoansController {
   ) {
     try {
       const { userID } = request.params;
-      const loan = await services.loans.findLoan({ userId: Number(userID) });
+      let page = Number(request.query.page);
+      let limit = Number(request.query.limit);
+      const startIndex = (page - 1) * limit;
+      const loan = await services.loans.findLoan({ userId: Number(userID) }, startIndex, limit);
       return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);

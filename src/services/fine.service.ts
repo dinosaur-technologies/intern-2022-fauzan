@@ -16,9 +16,13 @@ export class FineService {
     return newFine;
   }
 
-  async searchFine(params: SearchFineParams) {
+  async searchFine(params: SearchFineParams, startIndex: number, limit: number) {
     const { loanId } = params;
-    const existingFine = await repositories.fines.findByLoanId(loanId);
+    const existingFine = await repositories.fines.findByLoanId({
+      skip: startIndex,
+      take: limit,
+      loanId,
+    });
 
     if (!existingFine) {
       throw new NotFoundException('Existing fines not found');
