@@ -35,6 +35,12 @@ export class FineService {
     return existingFine;
   }
 
+  async countFine(params: SearchFineParams) {
+    const { loanId } = params;
+    const fine = await repositories.fines.count(loanId);
+    return fine;
+  }
+
   async deleteFine(params: DeleteFineParams) {
     const { id } = params;
     const existingFine = await repositories.fines.deleteById(id);

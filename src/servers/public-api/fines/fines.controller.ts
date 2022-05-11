@@ -49,14 +49,15 @@ export class FinesController {
   ) {
     try {
       const { loanID } = request.params;
+      const countData = await services.fines.countFine({ loanId: Number(loanID) });
       const fine = await services.fines.searchFine(
         {
           loanId: Number(loanID),
         },
-        request,
+        request
       );
 
-      return response.status(200).json({data: fine});
+      return response.status(200).json({ data: fine, count: countData });
     } catch (error) {
       this.logger.fatal(error);
       next(error);

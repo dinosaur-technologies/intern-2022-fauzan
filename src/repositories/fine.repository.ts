@@ -10,16 +10,16 @@ export class FinesRepository {
     return prisma.fine.delete({ where: { id } });
   }
 
-  async findByLoanId(params: {
-    loanId: number;
-    skip: number;
-    take: number;
-  }) {
+  async count(loanId: number) {
+    return prisma.fine.count({ where: { loanId } });
+  }
+
+  async findByLoanId(params: { loanId: number; skip: number; take: number }) {
     const { loanId, skip, take } = params;
-    return prisma.fine.findMany({ 
+    return prisma.fine.findMany({
       skip,
       take,
-      where :{loanId},
+      where: { loanId },
     });
   }
 }

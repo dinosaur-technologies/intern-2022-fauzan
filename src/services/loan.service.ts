@@ -22,7 +22,7 @@ export class LoanService {
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;
     const { userId } = params;
-    const existingLoan = await repositories.loans.findByUserId( {
+    const existingLoan = await repositories.loans.findByUserId({
       skip: startIndex,
       take: limit,
       userId,
@@ -33,6 +33,12 @@ export class LoanService {
     }
 
     return existingLoan;
+  }
+
+  async countLoan(params: FindLoanParams) {
+    const { userId } = params;
+    const loan = await repositories.loans.count(userId);
+    return loan;
   }
 
   async deleteLoan(params: DeleteLoanParams) {
