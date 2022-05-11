@@ -49,18 +49,14 @@ export class FinesController {
   ) {
     try {
       const { loanID } = request.params;
-      let page = Number(request.query.page);
-      let limit = Number(request.query.limit);
-      const startIndex = (page - 1) * limit;
       const fine = await services.fines.searchFine(
         {
           loanId: Number(loanID),
         },
-        startIndex,
-        limit
+        request,
       );
 
-      return response.status(200).json(fine);
+      return response.status(200).json({data: fine});
     } catch (error) {
       this.logger.fatal(error);
       next(error);

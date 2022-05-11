@@ -2,6 +2,7 @@ import { ConflictException, NotFoundException } from '@exceptions/http-exception
 import { ChargeFineParams, SearchFineParams, DeleteFineParams } from '@interfaces/fine.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
+import { serializePagination } from '@utils/serializePagination.util';
 
 export class FineService {
   private readonly logger = Logger('FineService');
@@ -16,7 +17,10 @@ export class FineService {
     return newFine;
   }
 
-  async searchFine(params: SearchFineParams, startIndex: number, limit: number) {
+  async searchFine(params: SearchFineParams, req: any) {
+    const page = serializePagination(req).page;
+    const limit = serializePagination(req).limit;
+    const startIndex = (page - 1) * limit;
     const { loanId } = params;
     const existingFine = await repositories.fines.findByLoanId({
       skip: startIndex,
