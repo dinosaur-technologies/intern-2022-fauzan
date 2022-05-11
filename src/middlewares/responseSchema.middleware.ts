@@ -5,19 +5,22 @@ import { serializePagination } from '@utils/serializePagination.util';
 export const responseSchema = () => {
   return (body: Object, req: Request, res: Response) => {
     const timestamp = dayjs().utc().format();
-
-    if (Array.isArray(body)) {
+    
+    if (Array.isArray(body["data"])) {
       const page = serializePagination(req).page;
       const limit = serializePagination(req).limit;
+      const totalRecords = Number(body["count"]);
+      const totalPage = Math.round(totalRecords/limit);
+      
 
       return res.json({
         data: {
-          body,
+          items: body["data"],
           pagination: {
             page: page,
             limit: limit,
-            // totalRecords: totalRecord,
-            // totalPages: totalPage,
+            totalRecords: totalRecords,
+            totalPages: totalPage,
           },
           meta: {
             requestId: req.id,

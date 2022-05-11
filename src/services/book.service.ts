@@ -9,6 +9,7 @@ import {
 } from '@interfaces/book.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
+import { serializePagination } from '@utils/serializePagination.util';
 
 export class BookService {
   private readonly logger = Logger('BookService');
@@ -54,7 +55,10 @@ export class BookService {
     return existingBook;
   }
 
-  async sortBook(params: SortBookParams, params2: FilterBookParams, startIndex: number, limit: number) {
+  async sortBook(params: SortBookParams, params2: FilterBookParams, req: any) {
+    const page = serializePagination(req).page;
+    const limit = serializePagination(req).limit;
+    const startIndex = (page - 1) * limit;
     const allBook = await repositories.books.sort({
       where: params2,
       orderBy: params,
