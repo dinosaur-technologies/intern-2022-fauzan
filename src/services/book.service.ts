@@ -55,7 +55,7 @@ export class BookService {
     return existingBook;
   }
 
-  async sortBook(params: SortBookParams, params2: FilterBookParams, req: any) {
+  async list(params: SortBookParams, params2: FilterBookParams, req: any) {
     const page = serializePagination(req).page;
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;

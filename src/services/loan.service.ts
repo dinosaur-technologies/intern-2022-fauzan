@@ -17,7 +17,7 @@ export class LoanService {
     return newLoan;
   }
 
-  async findLoan(params: FindLoanParams, req) {
+  async list(params: FindLoanParams, req) {
     const page = serializePagination(req).page;
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;

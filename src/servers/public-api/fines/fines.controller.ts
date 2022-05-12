@@ -50,7 +50,7 @@ export class FinesController {
     try {
       const { loanID } = request.params;
       const countData = await services.fines.countFine({ loanId: Number(loanID) });
-      const fine = await services.fines.searchFine(
+      const fine = await services.fines.list(
         {
           loanId: Number(loanID),
         },

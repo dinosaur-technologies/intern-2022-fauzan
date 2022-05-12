@@ -50,7 +50,7 @@ export class BooksController {
   ) {
     try {
       const countData = await services.books.countBook(request.body.filter)
-      const book = await services.books.sortBook(
+      const book = await services.books.list(
         request.body.sort,
         request.body.filter,
         request

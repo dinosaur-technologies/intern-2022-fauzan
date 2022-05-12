@@ -17,7 +17,7 @@ export class FineService {
     return newFine;
   }
 
-  async searchFine(params: SearchFineParams, req: any) {
+  async list(params: SearchFineParams, req: any) {
     const page = serializePagination(req).page;
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;
