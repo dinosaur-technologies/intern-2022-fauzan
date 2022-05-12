@@ -5,7 +5,7 @@ import {
   FindBookParams,
   SortBookParams,
   DeleteBookParams,
-  FilterBookParams
+  FilterBookParams,
 } from '@interfaces/book.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
@@ -59,7 +59,7 @@ export class BookService {
     const page = serializePagination(req).page;
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;
-    const allBook = await repositories.books.sort({
+    const allBook = await repositories.books.list({
       where: params2,
       orderBy: params,
       skip: startIndex,

@@ -6,8 +6,8 @@ export class BooksRepository {
     return prisma.book.create(params);
   }
 
-  async list() {
-    return prisma.book.findMany();
+  async list(params: Prisma.BookFindManyArgs) {
+    return prisma.book.findMany(params);
   }
 
   async deleteById(id: number) {
@@ -31,21 +31,6 @@ export class BooksRepository {
   }
 
   async count(params: Prisma.BookWhereInput) {
-    return prisma.book.count({where:params});
-  }
-
-  async sort(params: {
-    where: Prisma.BookWhereInput;
-    orderBy: Prisma.BookOrderByWithRelationInput;
-    skip: number;
-    take: number;
-  }) {
-    const { where,orderBy, skip, take } = params;
-    return prisma.book.findMany({
-      where,
-      skip,
-      take,
-      orderBy,
-    });
+    return prisma.book.count({ where: params });
   }
 }
