@@ -49,7 +49,6 @@ export class FinesController {
   ) {
     try {
       const { loanID } = request.params;
-      const countData = await services.fines.countFine({ loanId: Number(loanID) });
       const fine = await services.fines.list(
         {
           loanId: Number(loanID),
@@ -57,7 +56,7 @@ export class FinesController {
         request
       );
 
-      return response.status(200).json({ data: fine, count: countData });
+      return response.status(200).json({ data: fine.existingFine, count: fine.count });
     } catch (error) {
       this.logger.fatal(error);
       next(error);

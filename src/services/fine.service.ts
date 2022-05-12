@@ -22,6 +22,7 @@ export class FineService {
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;
     const { loanId } = params;
+    const count = await repositories.fines.count(loanId);
     const existingFine = await repositories.fines.findByLoanId({
       skip: startIndex,
       take: limit,
@@ -32,13 +33,7 @@ export class FineService {
       throw new NotFoundException('Existing fines not found');
     }
 
-    return existingFine;
-  }
-
-  async countFine(params: SearchFineParams) {
-    const { loanId } = params;
-    const fine = await repositories.fines.count(loanId);
-    return fine;
+    return { existingFine, count };
   }
 
   async deleteFine(params: DeleteFineParams) {

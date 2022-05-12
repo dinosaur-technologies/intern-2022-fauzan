@@ -59,6 +59,7 @@ export class BookService {
     const page = serializePagination(req).page;
     const limit = serializePagination(req).limit;
     const startIndex = (page - 1) * limit;
+    const count = await repositories.books.count(params2);
     const allBook = await repositories.books.list({
       where: params2,
       orderBy: params,
@@ -66,12 +67,7 @@ export class BookService {
       take: limit,
     });
 
-    return allBook;
-  }
-
-  async countBook(params: FilterBookParams) {
-    const book = await repositories.books.count(params);
-    return book;
+    return { allBook, count };
   }
 
   async deleteBook(params: DeleteBookParams) {

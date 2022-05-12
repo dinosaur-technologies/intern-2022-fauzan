@@ -20,7 +20,6 @@ import { validate } from '@utils/validate.util';
 import { BookDto } from '@servers/public-api/books/books.dto';
 import { services } from '@services/index.service';
 
-
 @Controller('/books')
 export class BooksController {
   private readonly logger = Logger('BooksController');
@@ -49,13 +48,8 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const countData = await services.books.countBook(request.body.filter)
-      const book = await services.books.list(
-        request.body.sort,
-        request.body.filter,
-        request
-      );
-      return response.status(200).json({data: book, count: countData});
+      const book = await services.books.list(request.body.sort, request.body.filter, request);
+      return response.status(200).json({ data: book.allBook, count: book.count });
     } catch (error) {
       this.logger.fatal(error);
       next(error);
