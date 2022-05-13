@@ -6,7 +6,7 @@ export class BooksRepository {
     return prisma.book.create(params);
   }
 
-  async list(params: Prisma.BookFindManyArgs) {
+  async findMany(params: Prisma.BookFindManyArgs) {
     return prisma.book.findMany(params);
   }
 

@@ -60,7 +60,7 @@ export class BookService {
     const limit = serializePaginationParams(req).limit;
 
     const total = await repositories.books.count(params2);
-    const items = await repositories.books.list({
+    const items = await repositories.books.findMany({
       where: params2,
       orderBy: params,
       skip: (page - 1) * limit,
