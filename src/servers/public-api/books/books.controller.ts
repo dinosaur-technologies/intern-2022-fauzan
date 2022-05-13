@@ -49,7 +49,7 @@ export class BooksController {
   ) {
     try {
       const book = await services.books.list(request.body.sort, request.body.filter, request);
-      return response.status(200).json({ data: book.allBook, count: book.count });
+      return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

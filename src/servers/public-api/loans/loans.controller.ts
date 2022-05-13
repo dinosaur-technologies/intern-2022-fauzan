@@ -50,7 +50,7 @@ export class LoansController {
     try {
       const { userID } = request.params;
       const loan = await services.loans.list({ userId: Number(userID) }, request);
-      return response.status(200).json({ data: loan.existingLoan, count: loan.count });
+      return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

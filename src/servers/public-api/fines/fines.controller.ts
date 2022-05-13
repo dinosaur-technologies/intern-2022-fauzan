@@ -56,7 +56,7 @@ export class FinesController {
         request
       );
 
-      return response.status(200).json({ data: fine.existingFine, count: fine.count });
+      return response.status(200).json(fine);
     } catch (error) {
       this.logger.fatal(error);
       next(error);

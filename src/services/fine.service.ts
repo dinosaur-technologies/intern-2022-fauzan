@@ -2,7 +2,7 @@ import { ConflictException, NotFoundException } from '@exceptions/http-exception
 import { ChargeFineParams, SearchFineParams, DeleteFineParams } from '@interfaces/fine.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
-import { serializePagination } from '@utils/serializePagination.util';
+import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
 
 export class FineService {
   private readonly logger = Logger('FineService');
@@ -18,22 +18,28 @@ export class FineService {
   }
 
   async list(params: SearchFineParams, req: any) {
-    const page = serializePagination(req).page;
-    const limit = serializePagination(req).limit;
-    const startIndex = (page - 1) * limit;
+    const page = serializePaginationParams(req).page;
+    const limit = serializePaginationParams(req).limit;
     const { loanId } = params;
-    const count = await repositories.fines.count(loanId);
-    const existingFine = await repositories.fines.findByLoanId({
-      skip: startIndex,
+    const total = await repositories.fines.count(loanId);
+    const items = await repositories.fines.findByLoanId({
+      skip: (page - 1) * limit,
       take: limit,
       loanId,
     });
 
-    if (!existingFine) {
+    if (!items) {
       throw new NotFoundException('Existing fines not found');
     }
 
-    return { existingFine, count };
+    return {
+      items,
+      pagination: new Pagination({
+        page,
+        limit,
+        total,
+      }),
+    };
   }
 
   async deleteFine(params: DeleteFineParams) {
