@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { dayjs } from '@utils/dayjs.util';
 import { serializePagination } from '@utils/serializePagination.util';
 
-export const responseSchema = () => {
+export const responseMiddleware = () => {
   return (body: Object, req: Request, res: Response) => {
     const timestamp = dayjs().utc().format();
     
