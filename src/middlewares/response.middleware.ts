@@ -6,7 +6,7 @@ export const responseMiddleware = () => {
     const timestamp = dayjs().utc().format();
 
     if (Array.isArray(body['items']) && body['pagination']) {
-      return res.json({
+      return res.status(res.statusCode).json({
         data: {
           items: body['items'],
           pagination: body['pagination'],
@@ -20,7 +20,7 @@ export const responseMiddleware = () => {
       });
     } else {
       const data = body;
-      return res.json({
+      return res.status(res.statusCode).json({
         data,
         meta: {
           requestId: req.id,
