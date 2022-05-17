@@ -7,6 +7,8 @@ import { Router } from 'express';
 import requestID from 'express-request-id';
 import morgan from 'morgan';
 import session from 'express-session';
+import mung from 'express-mung';
+import { responseMiddleware } from '@middlewares/response.middleware'
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -29,6 +31,8 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
 
   app.set('trust proxy', 1);
 
+  app.use(requestID());
+
   app.use(
     session({
       secret: 'keyboard cat',
@@ -37,6 +41,8 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
       saveUninitialized: true,
     })
   );
+
+  app.use(mung.json(responseMiddleware()));
 
   const router = Router();
   attachControllers(router, controllers);

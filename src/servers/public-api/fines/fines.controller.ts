@@ -49,9 +49,12 @@ export class FinesController {
   ) {
     try {
       const { loanID } = request.params;
-      const fine = await services.fines.searchFine({
-        loanId: Number(loanID),
-      });
+      const fine = await services.fines.list(
+        {
+          loanId: Number(loanID),
+        },
+        request
+      );
 
       return response.status(200).json(fine);
     } catch (error) {

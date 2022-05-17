@@ -6,15 +6,15 @@ export class BooksRepository {
     return prisma.book.create(params);
   }
 
-  async list() {
-    return prisma.book.findMany();
+  async findMany(params: Prisma.BookFindManyArgs) {
+    return prisma.book.findMany(params);
   }
 
   async deleteById(id: number) {
     return prisma.book.delete({ where: { id } });
   }
 
-  async updateById(params: {data: Prisma.BookUpdateInput, where: {id: number}}) {
+  async updateById(params: { data: Prisma.BookUpdateInput; where: { id: number } }) {
     const { where, data } = params;
     return prisma.book.update({
       data,
@@ -30,11 +30,7 @@ export class BooksRepository {
     return prisma.book.findUnique({ where: { id } });
   }
 
-  async sort(params: Prisma.BookOrderByWithRelationInput) {
-    return prisma.book.findMany({
-      orderBy: 
-        params,
-      
-    });
+  async count(params: Prisma.BookWhereInput) {
+    return prisma.book.count({ where: params });
   }
 }

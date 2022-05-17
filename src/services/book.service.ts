@@ -5,9 +5,11 @@ import {
   FindBookParams,
   SortBookParams,
   DeleteBookParams,
+  FilterBookParams,
 } from '@interfaces/book.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
+import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
 
 export class BookService {
   private readonly logger = Logger('BookService');
@@ -53,10 +55,26 @@ export class BookService {
     return existingBook;
   }
 
-  async sortBook(params: SortBookParams) {
-    const allBook = await repositories.books.sort(params);
+  async list(params: SortBookParams, params2: FilterBookParams, req: any) {
+    const page = serializePaginationParams(req).page;
+    const limit = serializePaginationParams(req).limit;
 
-    return allBook;
+    const total = await repositories.books.count(params2);
+    const items = await repositories.books.findMany({
+      where: params2,
+      orderBy: params,
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      items,
+      pagination: new Pagination({
+        page,
+        limit,
+        total,
+      }),
+    };
   }
 
   async deleteBook(params: DeleteBookParams) {

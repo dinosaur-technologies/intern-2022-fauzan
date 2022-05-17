@@ -48,7 +48,7 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const book = await services.books.sortBook(request.body);
+      const book = await services.books.list(request.body.sort, request.body.filter, request);
       return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);

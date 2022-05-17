@@ -2,6 +2,7 @@ import { ConflictException, NotFoundException } from '@exceptions/http-exception
 import { LoanBookParams, FindLoanParams, DeleteLoanParams } from '@interfaces/loan.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
+import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
 
 export class LoanService {
   private readonly logger = Logger('LoanService');
@@ -16,15 +17,29 @@ export class LoanService {
     return newLoan;
   }
 
-  async findLoan(params: FindLoanParams) {
+  async list(params: FindLoanParams, req) {
+    const page = serializePaginationParams(req).page;
+    const limit = serializePaginationParams(req).limit;
     const { userId } = params;
-    const existingLoan = await repositories.loans.findByUserId(userId);
+    const total = await repositories.loans.count(userId);
+    const items = await repositories.loans.findByUserId({
+      skip: (page - 1) * limit,
+      take: limit,
+      userId,
+    });
 
-    if (!existingLoan) {
+    if (!items) {
       throw new NotFoundException('Existing loans not found');
     }
 
-    return existingLoan;
+    return {
+      items,
+      pagination: new Pagination({
+        page,
+        limit,
+        total,
+      }),
+    };
   }
 
   async deleteLoan(params: DeleteLoanParams) {

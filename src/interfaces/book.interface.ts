@@ -32,6 +32,12 @@ export interface SortBookParams {
   year?
 }
 
+export interface FilterBookParams {
+  title?
+  author?
+  year?
+}
+
 export interface DeleteBookParams {
   id: number;
 }
