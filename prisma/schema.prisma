@@ -54,7 +54,8 @@ model Loan {
   bookId    Int
   users     User     @relation(fields: [userId], references: [id])
   userId    Int
-  startDate DateTime
+  status    String   @default("Not Returned")
+  startDate DateTime 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -66,6 +67,7 @@ model Fine {
   value     String
   loan      Loan     @relation(fields: [loanId], references: [id])
   loanId    Int
+  status    String   @default("Not Paid")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
