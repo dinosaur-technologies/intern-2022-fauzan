@@ -19,6 +19,7 @@ import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { BookDto } from '@servers/public-api/books/books.dto';
 import { services } from '@services/index.service';
+import { FilterBookParams, SortBookParams } from '@interfaces/book.interface';
 
 @Controller('/books')
 export class BooksController {
@@ -31,10 +32,11 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const body = await validate<BookDto>(BookDto, request.body);
-      const book = await services.books.registerBook(request.body);
+      console.log("ini = "+request.session.account.id)
+      // const body = await validate<BookDto>(BookDto, request.body);
+      // const book = await services.books.registerBook(request.body);
 
-      return response.status(201).json(book);
+      // return response.status(201).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -48,7 +50,25 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const book = await services.books.list(request.body.sort, request.body.filter, request);
+
+      
+      const sort = request.query.sort as SortBookParams
+      const filter = request.query.filter as FilterBookParams
+      
+      function removeEmptyFields(data: any) {
+        Object.keys(data).forEach((key) => {
+          if (data[key] === "") {
+            delete data[key];
+          }
+        });
+      }
+
+    if(filter != undefined){
+      removeEmptyFields(filter)
+    }  
+    
+    console.log("Dri list books " + request.session.account)
+      const book = await services.books.list(sort, filter, request);
       return response.status(200).json(book);
     } catch (error) {
       this.logger.fatal(error);
