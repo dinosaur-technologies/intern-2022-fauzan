@@ -20,8 +20,8 @@ export const globalErrorHandler = () => {
           errors: (error as ValidationError[]).map((e) => {
             // Handle Arrays
             if (e.children && e.children.length) {
-              const [child] = e?.children;
-              const [grandChild] = child?.children;
+              const [child] = e.children;
+              const [grandChild] = child.children;
 
               return {
                 [e.property]: grandChild.constraints,

@@ -2,10 +2,7 @@ import { init } from '@providers/app.provider';
 import { config } from '@providers/config.provider';
 import { AdminsController } from '@servers/admin-api/admins/admins.controller';
 
-const { app, logger } = init(
-  'Admin API',
-  [AdminsController],
-);
+const { app, logger } = init('Admin API', [AdminsController]);
 
 app.listen(config.ADMIN_API_PORT, async () => {
   try {

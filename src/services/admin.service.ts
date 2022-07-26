@@ -37,6 +37,12 @@ export class AdminService {
     const { email, username, password } = params;
     const hash = hashSync(password);
 
+    const isEmailInUse = repositories.admins.findOneByEmail(email);
+
+    if (isEmailInUse) {
+      throw new ConflictException('Email is already in use');
+    }
+
     const newAdmin = await repositories.admins.create({
       data: {
         email,

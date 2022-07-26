@@ -18,12 +18,20 @@ import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { SignUpDto, ResetPassDto } from '@servers/admin-api/admins/admin.dto';
 import { services } from '@services/index.service';
+import { IsAuthenticatedAdmin } from '@middlewares/is-authenticated-admin.middleware';
 
-@Controller('/admins')
+@Controller(
+  '/admins'
+  // This is how you would attach the middleware on a controller/resource level
+  // [IsAuthenticatedAdmin]
+)
 export class AdminsController {
   private readonly logger = Logger('AdminsController');
 
-  @Post('/')
+  // This is how you would attach middlewares on a method/HTTP VERB level
+  // This basically will run the check inside IsAuthenticatedAdmin(is-authenticated-admin.middleware.ts)
+  // Before it hits this method
+  @Post('/', [IsAuthenticatedAdmin])
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
