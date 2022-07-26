@@ -8,7 +8,12 @@ import requestID from 'express-request-id';
 import morgan from 'morgan';
 import session from 'express-session';
 import mung from 'express-mung';
+<<<<<<< HEAD
 import { responseMiddleware } from '@middlewares/response.middleware';
+=======
+import { responseMiddleware } from '@middlewares/response.middleware'
+import cors from 'cors';
+>>>>>>> 60bf3fc (Add Cors)
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -17,6 +22,10 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
 
   const app = express();
   const logger = Logger(name);
+  const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+}
 
   morgan.token('requestID', (req) => {
     return req.id;
@@ -30,6 +39,8 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
   );
 
   app.set('trust proxy', 1);
+
+  app.use(cors(corsOptions));
 
   app.use(requestID());
 
