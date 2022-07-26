@@ -32,11 +32,11 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      console.log("ini = "+request.session.account.id)
-      // const body = await validate<BookDto>(BookDto, request.body);
-      // const book = await services.books.registerBook(request.body);
+      console.log("Request session: "+ request.session.account);
+      const body = await validate<BookDto>(BookDto, request.body);
+      const book = await services.books.registerBook(request.body);
 
-      // return response.status(201).json(book);
+      return response.status(201).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -50,24 +50,21 @@ export class BooksController {
     @Next() next: ExpressNextFunction
   ) {
     try {
+      const sort = request.query.sort as SortBookParams;
+      const filter = request.query.filter as FilterBookParams;
 
-      
-      const sort = request.query.sort as SortBookParams
-      const filter = request.query.filter as FilterBookParams
-      
       function removeEmptyFields(data: any) {
         Object.keys(data).forEach((key) => {
-          if (data[key] === "") {
+          if (data[key] === '') {
             delete data[key];
           }
         });
       }
 
-    if(filter != undefined){
-      removeEmptyFields(filter)
-    }  
-    
-    console.log("Dri list books " + request.session.account)
+      if (filter != undefined) {
+        removeEmptyFields(filter);
+      }
+
       const book = await services.books.list(sort, filter, request);
       return response.status(200).json(book);
     } catch (error) {
