@@ -17,11 +17,11 @@ export class LoanService {
     return newLoan;
   }
 
-  async list(params: FindLoanParams, req) {
+  async listByUserId(params: FindLoanParams, req) {
     const page = serializePaginationParams(req).page;
     const limit = serializePaginationParams(req).limit;
     const { userId } = params;
-    const total = await repositories.loans.count(userId);
+    const total = await repositories.loans.countByUserId(userId);
     const items = await repositories.loans.findByUserId({
       skip: (page - 1) * limit,
       take: limit,
@@ -51,5 +51,33 @@ export class LoanService {
     }
 
     return existingLoan;
+  }
+
+  async list(req: any) {
+    const page = serializePaginationParams(req).page;
+    const limit = serializePaginationParams(req).limit;
+
+    const total = await repositories.loans.count();
+    const items = await repositories.loans.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        books: true,
+        users:{
+          select:{
+            username:true
+          }
+        }
+      },
+    });
+
+    return {
+      items,
+      pagination: new Pagination({
+        page,
+        limit,
+        total,
+      }),
+    };
   }
 }

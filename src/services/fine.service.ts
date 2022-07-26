@@ -17,11 +17,11 @@ export class FineService {
     return newFine;
   }
 
-  async list(params: SearchFineParams, req: any) {
+  async listByLoanId(params: SearchFineParams, req: any) {
     const page = serializePaginationParams(req).page;
     const limit = serializePaginationParams(req).limit;
     const { loanId } = params;
-    const total = await repositories.fines.count(loanId);
+    const total = await repositories.fines.countByLoanId(loanId);
     const items = await repositories.fines.findByLoanId({
       skip: (page - 1) * limit,
       take: limit,
@@ -51,5 +51,25 @@ export class FineService {
     }
 
     return existingFine;
+  }
+
+  async list(req: any) {
+    const page = serializePaginationParams(req).page;
+    const limit = serializePaginationParams(req).limit;
+
+    const total = await repositories.fines.count();
+    const items = await repositories.fines.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      items,
+      pagination: new Pagination({
+        page,
+        limit,
+        total,
+      }),
+    };
   }
 }
