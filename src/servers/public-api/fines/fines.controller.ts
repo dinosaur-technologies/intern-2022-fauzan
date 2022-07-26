@@ -41,7 +41,7 @@ export class FinesController {
   }
 
   @Get('/:loanID')
-  async get(
+  async getByLoanID(
     @Params('loanID') loanID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -49,13 +49,28 @@ export class FinesController {
   ) {
     try {
       const { loanID } = request.params;
-      const fine = await services.fines.list(
+      const fine = await services.fines.listByLoanId(
         {
           loanId: Number(loanID),
         },
         request
       );
 
+      return response.status(200).json(fine);
+    } catch (error) {
+      this.logger.fatal(error);
+      next(error);
+    }
+  }
+
+  @Get('/')
+  async list(
+    @Request() request: ExpressRequest,
+    @Response() response: ExpressResponse,
+    @Next() next: ExpressNextFunction
+  ) {
+    try {
+      const fine = await services.fines.list(request);
       return response.status(200).json(fine);
     } catch (error) {
       this.logger.fatal(error);

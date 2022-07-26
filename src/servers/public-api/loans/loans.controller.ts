@@ -41,7 +41,7 @@ export class LoansController {
   }
 
   @Get('/:userID')
-  async get(
+  async getByUserID(
     @Params('userID') userID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -49,7 +49,22 @@ export class LoansController {
   ) {
     try {
       const { userID } = request.params;
-      const loan = await services.loans.list({ userId: Number(userID) }, request);
+      const loan = await services.loans.listByUserId({ userId: Number(userID) }, request);
+      return response.status(200).json(loan);
+    } catch (error) {
+      this.logger.fatal(error);
+      next(error);
+    }
+  }
+
+  @Get('/')
+  async list(
+    @Request() request: ExpressRequest,
+    @Response() response: ExpressResponse,
+    @Next() next: ExpressNextFunction
+  ) {
+    try {
+      const loan = await services.loans.list(request);
       return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);
