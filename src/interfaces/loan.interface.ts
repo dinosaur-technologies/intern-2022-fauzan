@@ -12,3 +12,6 @@ export interface LoanBookParams {
     id: number;
   }
   
+  export interface FilterLoanParams {
+    status?
+  }

@@ -19,6 +19,7 @@ import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { LoanDto } from '@servers/public-api/loans/loans.dto';
 import { services } from '@services/index.service';
+import { FilterLoanParams } from '@interfaces/loan.interface';
 
 @Controller('/loans')
 export class LoansController {
@@ -64,7 +65,8 @@ export class LoansController {
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const loan = await services.loans.list(request);
+      const filter = request.query.filter as FilterLoanParams;
+      const loan = await services.loans.list(filter, request);
       return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);

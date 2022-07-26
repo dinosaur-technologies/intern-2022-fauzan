@@ -1,5 +1,5 @@
 import { ConflictException, NotFoundException } from '@exceptions/http-exception';
-import { LoanBookParams, FindLoanParams, DeleteLoanParams } from '@interfaces/loan.interface';
+import { LoanBookParams, FindLoanParams, DeleteLoanParams, FilterLoanParams } from '@interfaces/loan.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
 import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
@@ -53,12 +53,13 @@ export class LoanService {
     return existingLoan;
   }
 
-  async list(req: any) {
+  async list(params: FilterLoanParams, req: any) {
     const page = serializePaginationParams(req).page;
     const limit = serializePaginationParams(req).limit;
 
     const total = await repositories.loans.count();
     const items = await repositories.loans.findMany({
+      where: params,
       skip: (page - 1) * limit,
       take: limit,
       include: {
