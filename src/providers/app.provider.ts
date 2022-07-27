@@ -8,7 +8,7 @@ import requestID from 'express-request-id';
 import morgan from 'morgan';
 import session from 'express-session';
 import mung from 'express-mung';
-import { responseMiddleware } from '@middlewares/response.middleware'
+import { responseMiddleware } from '@middlewares/response.middleware';
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -35,9 +35,14 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
 
   app.use(
     session({
+      // TODO: Please store this in environment variable or something with more randomized value
       secret: 'keyboard cat',
       resave: true,
-      cookie: { maxAge: 60000 },
+      cookie: {
+        httpOnly: true,
+        secure: false,
+        maxAge: 60000,
+      },
       saveUninitialized: true,
     })
   );
