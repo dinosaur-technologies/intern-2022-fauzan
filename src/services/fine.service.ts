@@ -61,6 +61,17 @@ export class FineService {
     const items = await repositories.fines.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      include: {
+        loan: {
+          include: {
+            users: {
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return {
