@@ -48,6 +48,7 @@
     "@decorators/express": "^2.6.0",
     "@prisma/client": "^3.11.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.12",
     "@types/express-mung": "^0.5.2",
     "@types/express-session": "^1.17.4",
     "bcryptjs": "^2.4.3",
