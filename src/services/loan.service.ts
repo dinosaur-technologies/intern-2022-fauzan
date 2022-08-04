@@ -1,5 +1,11 @@
 import { ConflictException, NotFoundException } from '@exceptions/http-exception';
-import { LoanBookParams, FindLoanParams, DeleteLoanParams, FilterLoanParams } from '@interfaces/loan.interface';
+import {
+  LoanBookParams,
+  FindLoanParams,
+  DeleteLoanParams,
+  FilterLoanParams,
+  UpdateLoanDetailParams,
+} from '@interfaces/loan.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
 import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
@@ -64,11 +70,11 @@ export class LoanService {
       take: limit,
       include: {
         books: true,
-        users:{
-          select:{
-            username:true
-          }
-        }
+        users: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
 
@@ -80,5 +86,18 @@ export class LoanService {
         total,
       }),
     };
+  }
+
+  async updateLoanDetail(params: UpdateLoanDetailParams, id: number) {
+    const newLoanDetail = await repositories.loans.updateById({
+      data: params,
+      where: { id },
+    });
+
+    if (!newLoanDetail) {
+      throw new NotFoundException('Loan Not found');
+    }
+
+    return newLoanDetail;
   }
 }

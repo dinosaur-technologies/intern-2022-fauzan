@@ -1,5 +1,10 @@
 import { ConflictException, NotFoundException } from '@exceptions/http-exception';
-import { ChargeFineParams, SearchFineParams, DeleteFineParams } from '@interfaces/fine.interface';
+import {
+  ChargeFineParams,
+  SearchFineParams,
+  DeleteFineParams,
+  UpdateFineDetailParams,
+} from '@interfaces/fine.interface';
 import { Logger } from '@providers/logger.provider';
 import { repositories } from '@repositories/index.repository';
 import { serializePaginationParams, Pagination } from '@utils/Pagination.util';
@@ -82,5 +87,18 @@ export class FineService {
         total,
       }),
     };
+  }
+
+  async updateLoanDetail(params: UpdateFineDetailParams, id: number) {
+    const newFineDetail = await repositories.fines.updateById({
+      data: params,
+      where: { id },
+    });
+
+    if (!newFineDetail) {
+      throw new NotFoundException('Fines Not found');
+    }
+
+    return newFineDetail;
   }
 }

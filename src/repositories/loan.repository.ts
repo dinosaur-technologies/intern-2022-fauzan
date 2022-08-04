@@ -30,4 +30,12 @@ export class LoansRepository {
   async findMany(params: Prisma.LoanFindManyArgs) {
     return prisma.loan.findMany(params);
   }
+
+  async updateById(params: { data: Prisma.LoanUpdateInput; where: { id: number } }) {
+    const { where, data } = params;
+    return prisma.loan.update({
+      data,
+      where,
+    });
+  }
 }

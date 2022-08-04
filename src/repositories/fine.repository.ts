@@ -30,4 +30,12 @@ export class FinesRepository {
   async findMany(params: Prisma.FineFindManyArgs) {
     return prisma.fine.findMany(params);
   }
+
+  async updateById(params: { data: Prisma.FineUpdateInput; where: { id: number } }) {
+    const { where, data } = params;
+    return prisma.fine.update({
+      data,
+      where,
+    });
+  }
 }

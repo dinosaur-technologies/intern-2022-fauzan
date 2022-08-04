@@ -10,3 +10,8 @@ export interface SearchFineParams {
 export interface DeleteFineParams {
   id: number;
 }
+
+export interface UpdateFineDetailParams {
+  status: string;
+  value: string;
+}
