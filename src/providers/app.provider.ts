@@ -8,12 +8,9 @@ import requestID from 'express-request-id';
 import morgan from 'morgan';
 import session from 'express-session';
 import mung from 'express-mung';
-<<<<<<< HEAD
 import { responseMiddleware } from '@middlewares/response.middleware';
-=======
-import { responseMiddleware } from '@middlewares/response.middleware'
 import cors from 'cors';
->>>>>>> 60bf3fc (Add Cors)
+import dotenv from 'dotenv';
 
 export const init = (name: string, controllers: any[], origin?: string[]) => {
   if (!name) {
@@ -25,7 +22,7 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
   const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
-}
+  };
 
   morgan.token('requestID', (req) => {
     return req.id;
@@ -47,14 +44,15 @@ export const init = (name: string, controllers: any[], origin?: string[]) => {
   app.use(
     session({
       // TODO: Please store this in environment variable or something with more randomized value
-      secret: 'keyboard cat',
-      resave: true,
+      secret: process.env.SECRET,
+      resave: false,
+      name: 'Admin',
       cookie: {
         httpOnly: true,
         secure: false,
         maxAge: 60000,
       },
-      saveUninitialized: true,
+      saveUninitialized: false,
     })
   );
 
