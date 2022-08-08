@@ -25,24 +25,6 @@ import { FilterBookParams, SortBookParams } from '@interfaces/book.interface';
 export class BooksController {
   private readonly logger = Logger('BooksController');
 
-  @Post('/')
-  async create(
-    @Request() request: ExpressRequest,
-    @Response() response: ExpressResponse,
-    @Next() next: ExpressNextFunction
-  ) {
-    try {
-      console.log("Request session: "+ request.session.account);
-      const body = await validate<BookDto>(BookDto, request.body);
-      const book = await services.books.registerBook(request.body);
-
-      return response.status(201).json(book);
-    } catch (error) {
-      this.logger.fatal(error);
-      next(error);
-    }
-  }
-
   @Get('/')
   async list(
     @Request() request: ExpressRequest,
