@@ -10,20 +10,21 @@ import {
   Next,
   Params,
   Post,
+  Get,
   Put,
   Request,
   Response,
 } from '@decorators/express';
 import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
-import { SignUpDto, ResetPassDto } from '@servers/admin-api/admins/admin.dto';
+import { SignUpDto, BookDto } from '@servers/admin-api/admins/admin.dto';
 import { services } from '@services/index.service';
 import { IsAuthenticatedAdmin } from '@middlewares/is-authenticated-admin.middleware';
 
 @Controller(
-  '/admins'
+  '/admins',
   // This is how you would attach the middleware on a controller/resource level
-  // [IsAuthenticatedAdmin]
+  [IsAuthenticatedAdmin]
 )
 export class AdminsController {
   private readonly logger = Logger('AdminsController');
@@ -31,7 +32,7 @@ export class AdminsController {
   // This is how you would attach middlewares on a method/HTTP VERB level
   // This basically will run the check inside IsAuthenticatedAdmin(is-authenticated-admin.middleware.ts)
   // Before it hits this method
-  @Post('/', [IsAuthenticatedAdmin])
+  @Post('/')
   async create(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -47,32 +48,19 @@ export class AdminsController {
     }
   }
 
-  @Post('/signin')
-  async authenticate(
+  @Post('/add-book')
+  async createBook(
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
     @Next() next: ExpressNextFunction
   ) {
     try {
-      const account = await services.admins.signin(request.body);
-      request.session.account = account;
-      return response.status(200).json({ message: 'Login sucessful' });
-    } catch (error) {
-      this.logger.fatal(error);
-      next(error);
-    }
-  }
+      Object.assign(request.body, { createdBy: request.session.account.id });
 
-  @Put('/password-reset')
-  async update(
-    @Request() request: ExpressRequest,
-    @Response() response: ExpressResponse,
-    @Next() next: ExpressNextFunction
-  ) {
-    try {
-      const body = await validate<ResetPassDto>(ResetPassDto, request.body);
-      const data = await services.admins.resetPassword(request.body);
-      return response.status(200).json(data);
+      const body = await validate<BookDto>(BookDto, request.body);
+      const book = await services.books.registerBook(request.body);
+
+      return response.status(201).json(book);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
@@ -90,6 +78,42 @@ export class AdminsController {
       const { ID } = request.params;
       const admin = await services.admins.deleteAdmin({ id: Number(ID) });
       return response.sendStatus(204);
+    } catch (error) {
+      this.logger.fatal(error);
+      next(error);
+    }
+  }
+
+  @Put('/loan/:LoanID')
+  async updateLoan(
+    @Params('LoanID') LoanID: string,
+    @Request() request: ExpressRequest,
+    @Response() response: ExpressResponse,
+    @Next() next: ExpressNextFunction
+  ) {
+    try {
+      const { LoanID } = request.params;
+      const id = Number(LoanID);
+      const loan = await services.loans.updateLoanDetail(request.body, id);
+      return response.status(200).json(loan);
+    } catch (error) {
+      this.logger.fatal(error);
+      next(error);
+    }
+  }
+
+  @Put('/fines/:FineID')
+  async updateFine(
+    @Params('FineID') FineID: string,
+    @Request() request: ExpressRequest,
+    @Response() response: ExpressResponse,
+    @Next() next: ExpressNextFunction
+  ) {
+    try {
+      const { FineID } = request.params;
+      const id = Number(FineID);
+      const fine = await services.fines.updateLoanDetail(request.body, id);
+      return response.status(200).json(fine);
     } catch (error) {
       this.logger.fatal(error);
       next(error);
