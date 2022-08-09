@@ -19,7 +19,23 @@ export class LoansRepository {
     return prisma.loan.delete({ where: { id } });
   }
 
-  async count(userId: number) {
+  async countByUserId(userId: number) {
     return prisma.loan.count({ where: { userId } });
+  }
+
+  async count() {
+    return prisma.loan.count();
+  }
+
+  async findMany(params: Prisma.LoanFindManyArgs) {
+    return prisma.loan.findMany(params);
+  }
+
+  async updateById(params: { data: Prisma.LoanUpdateInput; where: { id: number } }) {
+    const { where, data } = params;
+    return prisma.loan.update({
+      data,
+      where,
+    });
   }
 }

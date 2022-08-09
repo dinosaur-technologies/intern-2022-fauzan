@@ -19,29 +19,14 @@ import { Logger } from '@providers/logger.provider';
 import { validate } from '@utils/validate.util';
 import { LoanDto } from '@servers/public-api/loans/loans.dto';
 import { services } from '@services/index.service';
+import { FilterLoanParams } from '@interfaces/loan.interface';
 
 @Controller('/loans')
 export class LoansController {
   private readonly logger = Logger('LoansController');
 
-  @Post('/')
-  async create(
-    @Request() request: ExpressRequest,
-    @Response() response: ExpressResponse,
-    @Next() next: ExpressNextFunction
-  ) {
-    try {
-      const body = await validate<LoanDto>(LoanDto, request.body);
-      const loan = await services.loans.loanBook(request.body);
-      return response.status(201).json(loan);
-    } catch (error) {
-      this.logger.fatal(error);
-      next(error);
-    }
-  }
-
   @Get('/:userID')
-  async get(
+  async getByUserID(
     @Params('userID') userID: string,
     @Request() request: ExpressRequest,
     @Response() response: ExpressResponse,
@@ -49,7 +34,23 @@ export class LoansController {
   ) {
     try {
       const { userID } = request.params;
-      const loan = await services.loans.list({ userId: Number(userID) }, request);
+      const loan = await services.loans.listByUserId({ userId: Number(userID) }, request);
+      return response.status(200).json(loan);
+    } catch (error) {
+      this.logger.fatal(error);
+      next(error);
+    }
+  }
+
+  @Get('/')
+  async list(
+    @Request() request: ExpressRequest,
+    @Response() response: ExpressResponse,
+    @Next() next: ExpressNextFunction
+  ) {
+    try {
+      const filter = request.query.filter as FilterLoanParams;
+      const loan = await services.loans.list(filter, request);
       return response.status(200).json(loan);
     } catch (error) {
       this.logger.fatal(error);

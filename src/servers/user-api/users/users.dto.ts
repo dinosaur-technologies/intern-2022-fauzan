@@ -17,14 +17,13 @@ export class SignUpDto {
   @IsDefined({
     message: 'Phone number is required',
   })
-  phoneNumber: string
+  phoneNumber: string;
 
   @IsDefined({
     message: 'Password is required',
   })
   @MinLength(4)
   password: string;
-
 }
 
 export class ResetPassDto {
@@ -33,5 +32,11 @@ export class ResetPassDto {
   })
   @MinLength(4)
   newPassword: string;
+}
 
+export class LoanDto {
+  @IsDefined({
+    message: 'Date is required',
+  })
+  startDate: string;
 }
